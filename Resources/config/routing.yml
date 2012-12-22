@@ -1,0 +1,7 @@
+ns_admin_index:
+    pattern:  /admin/
+    defaults: { _controller: NSAdminBundle:Default:index }
+
+ns_admin_bundle:
+    pattern: /admin/{adminBundle}/{adminController}/{adminAction}
+    defaults: { _controller: NSAdminBundle:Default:bundle }

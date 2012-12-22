@@ -1,0 +1,68 @@
+{% block elrte_widget %}
+    <script type="text/javascript" charset="utf-8">
+        $().ready(function () {
+            var opts = {
+                cssClass: 'el-rte',
+                lang: 'ru',
+                height: 450,
+                toolbar: 'complete'
+            }
+            $('#{{ form.vars.id }}').attr('required', null);
+            $('#{{ form.vars.id }}').elrte(opts);
+        });
+    </script>
+
+    {{ block('textarea_widget') }}
+{% endblock %}
+
+{% block ns_image_widget %}
+	{% if value %}
+		<div id="{{ form.vars.id }}_preview">
+			<div style="width:210px;height:210px;border:solid 1px #ccc;background:#eee url({{ asset(attribute(form.parent.vars.data, name ~ 'WebPath')) | apply_filter('ns_admin_image') }}) no-repeat 50% 50%"></div>
+			<a href="#" id="{{ form.vars.id }}_remove_link">Удалить</a>
+		</div>
+
+		<script type="text/javascript">
+			(function($){
+				// hiding file upload control group
+				$('#{{ form.parent.child(name ~ 'File').vars.id }}_control_group').hide();
+
+				// delete click handler
+				$('#{{ form.vars.id }}_remove_link').click(function(){
+					// removing image
+					$('#{{ form.vars.id }}_control_group').remove();
+					$(this).remove();
+
+					// showing file upload control group
+					$('#{{ form.parent.child(name ~ 'File').vars.id }}_control_group').show();
+
+					// remove flag
+					{% if not form.vars.required %}
+						$('#{{ form.parent.child(name ~ 'Delete').vars.id }}').val('1');
+					{% endif %}
+
+					return false;
+				});
+			})(jQuery);
+		</script>
+	{% else %}
+		<script type="text/javascript">
+			(function($){
+				// hiding image preview control group
+				$('#{{ form.vars.id }}_control_group').remove();
+			})(jQuery);
+		</script>
+	{% endif %}
+
+	{{ block('simple_form') }}
+{% endblock %}
+
+{% block ns_image_row %}
+	{% spaceless %}
+		<div id="{{ form.vars.id }}_control_group" class="control-group">
+			{{ form_label(form) }}
+			{{ form_errors(form) }}
+			{{ form_widget(form) }}
+		</div>
+	{% endspaceless %}
+{% endblock %}

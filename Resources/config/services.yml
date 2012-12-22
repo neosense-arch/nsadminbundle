@@ -1,0 +1,16 @@
+services:
+
+    # menu builder
+    ns_admin.menu_builder:
+        class: NS\AdminBundle\Menu\Builder
+        arguments: [@knp_menu.factory, %ns_admin.bundles%]
+        calls:
+            - [setContainer, [@service_container]]
+
+    # main menu
+    ns_admin.menu.main:
+        class: Knp\Menu\MenuItem
+        factory_service: ns_admin.menu_builder
+        factory_method: createMainMenu
+        tags:
+            - { name: knp_menu.menu, alias: main }

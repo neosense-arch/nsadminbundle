@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Admin panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% stylesheets filter='cssrewrite'
+        '@MopaBootstrapBundle/Resources/bootstrap/docs/assets/css/bootstrap.css'
+        '@MopaBootstrapBundle/Resources/bootstrap/docs/assets/css/bootstrap-responsive.css'
+        '@NSAdminBundle/Resources/public/css/style.css'
+    %}
+        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
+    {% endstylesheets %}
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        [class^="icon-"],
+        [class*=" icon-"] {
+            background-image: url('{{ asset('bundles/mopabootstrap/img/glyphicons-halflings.png') }}');
+        }
+
+		.loader {
+			background: url('{{ asset('bundles/nsadmin/images/loader.gif') }}');
+			height: 20px;
+			margin: 10px 10px 0 0;
+			width:20px;
+		}
+    </style>
+
+    {% javascripts
+        'http://code.jquery.com/jquery-1.8.3.min.js'
+		'http://code.jquery.com/ui/1.9.2/jquery-ui.min.js'
+
+        '@NSAdminBundle/Resources/public/elrte/js/elrte.full.js'
+        '@NSAdminBundle/Resources/public/elrte/js/i18n/elrte.ru.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <link href="{{ asset('bundles/nsadmin/elrte/css/smoothness/jquery-ui-1.8.13.custom.css') }}" type="text/css" rel="stylesheet" media="screen"/>
+    <link href="{{ asset('bundles/nsadmin/elrte/css/elrte.min.css') }}" type="text/css" rel="stylesheet" media="screen"/>
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+<div class="navbar navbar-inverse navbar-fixed-top" id="ns-navbar" style="background: red">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="brand" href="{{ path('ns_admin_index') }}">Engine</a>
+
+            <div class="nav-collapse collapse">
+                {{ knp_menu_render('main', { depth: 1, currentClass: 'active' }) }}
+            </div>
+
+			<div class="nav-collapse collapse pull-right">
+				<div class="loader" id="ns-loader">&nbsp;</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top: 30px">
+    {% block content %}
+        Default content
+    {% endblock %}
+</div>
+
+<footer class="footer">
+    <hr/>
+    <div class="container">
+        <p class="pull-right">
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            {% else %}
+                <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+            {% endif %}
+        </p>
+        NS Content Management System &copy; 2012 NS
+    </div>
+</footer>
+
+<script type="text/javascript">
+	(function($){
+		// LOADER
+		$('#ns-loader').css('opacity', 0);
+
+		// SORTABLES
+		$(".table-sortable tbody").each(function(i, tbody){
+			// ajax-handler check
+			if (!$(tbody).parent().attr('data-sortable-handler')) {
+				throw "Required attribute 'data-sortable-handler' wasn't found";
+			}
+
+			$(tbody).sortable({
+				'helper': function(e, ui) {
+					ui.children().each(function() {
+						$(this).width($(this).width());
+					});
+					return ui;
+				},
+				'axis': 'y',
+				'stop': function(e, ui){
+					// checking id attribute
+					if (!ui.item.attr('data-sortable-id')) {
+						throw "Required attribute 'data-sortable-id' wasn't found";
+					}
+					// saving position
+					$('#ns-loader').animate({'opacity': 1});
+					$.ajax({
+						'url': $(tbody).parent().attr('data-sortable-handler'),
+						'data': {
+							'id': +ui.item.attr('data-sortable-id'),
+							'position': $(tbody).find('tr').index(ui.item)
+						}
+					})
+					.done(function(res){
+						if (res && typeof(res.error) != 'undefined') {
+							throw res.error;
+						}
+					})
+					.always(function(){
+						$('#ns-loader').animate({'opacity': 0});
+					});
+				}
+			}).disableSelection();
+		});
+	})(jQuery);
+</script>
+
+{% block foot_script %}
+    {# To only use a subset or add more js overwrite and copy paste this block
+    To speed up page loads save a copy of jQuery in your project and override this block to include the correct path
+    Otherwise the regeneration is done on every load in dev more with use_controller: true
+     #}
+    {% javascripts
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-transition.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-modal.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-dropdown.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-scrollspy.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-tab.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-tooltip.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-popover.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-alert.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-button.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-collapse.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-carousel.js'
+        '@MopaBootstrapBundle/Resources/bootstrap/js/bootstrap-typeahead.js'
+        '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
+        '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-subnav.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock foot_script %}
+
+</body>
+</html>
