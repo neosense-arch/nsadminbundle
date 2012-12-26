@@ -54,7 +54,7 @@
 		</script>
 	{% endif %}
 
-	{{ block('simple_form') }}
+	<input type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %} />
 {% endblock %}
 
 {% block ns_image_row %}
