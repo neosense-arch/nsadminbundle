@@ -7,3 +7,15 @@ form .control-group textarea {
 	height: 400px;
 	width: 100%;
 }
+
+[class^="icon-"],
+[class*=" icon-"] {
+	background-image: url(/bundles/mopabootstrap/img/glyphicons-halflings.png) !important;
+}
+
+.loader {
+	background: url(/bundles/nsadmin/images/loader.gif);
+	height: 20px;
+	margin: 10px 10px 0 0;
+	width:20px;
+}
