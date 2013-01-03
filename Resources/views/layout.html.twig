@@ -13,36 +13,19 @@
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
     {% endstylesheets %}
 
-    <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <style type="text/css">
-        [class^="icon-"],
-        [class*=" icon-"] {
-            background-image: url('{{ asset('bundles/mopabootstrap/img/glyphicons-halflings.png') }}');
-        }
-
-		.loader {
-			background: url('{{ asset('bundles/nsadmin/images/loader.gif') }}');
-			height: 20px;
-			margin: 10px 10px 0 0;
-			width:20px;
-		}
-    </style>
-
-    {% javascripts
-        'http://code.jquery.com/jquery-1.8.3.min.js'
-		'http://code.jquery.com/ui/1.9.2/jquery-ui.min.js'
-
-        '@NSAdminBundle/Resources/public/elrte/js/elrte.full.js'
-        '@NSAdminBundle/Resources/public/elrte/js/i18n/elrte.ru.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
     <link href="{{ asset('bundles/nsadmin/elrte/css/smoothness/jquery-ui-1.8.13.custom.css') }}" type="text/css" rel="stylesheet" media="screen"/>
     <link href="{{ asset('bundles/nsadmin/elrte/css/elrte.min.css') }}" type="text/css" rel="stylesheet" media="screen"/>
+    <link href="{{ asset('bundles/nsadmin/dynatree/src/skin/ui.dynatree.css') }}" type="text/css" rel="stylesheet" media="screen"/>
+
+	{# HEAD JS block #}
+	{% block javascripts %}
+		{# IE compatibility #}
+		<!--[if lt IE 9]><script src="{{ asset('bundles/nsadmin/html5shim/html5.js') }}"></script><![endif]-->
+
+		{# jQuery #}
+		<script src="{{ asset('bundles/nsadmin/jquery/jquery.min.js') }}"></script>
+		<script src="{{ asset('bundles/nsadmin/jquery/jquery-ui.min.js') }}"></script>
+	{% endblock %}
 </head>
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -141,6 +124,14 @@
 </script>
 
 {% block foot_script %}
+	{# Elrte #}
+	<script src="{{ asset('bundles/nsadmin/elrte/js/elrte.full.js') }}"></script>
+	<script src="{{ asset('bundles/nsadmin/elrte/js/i18n/elrte.ru.js') }}"></script>
+
+	{# Dynatree #}
+	<script src="{{ asset('bundles/nsadmin/dynatree/jquery/jquery.cookie.js') }}"></script>
+	<script src="{{ asset('bundles/nsadmin/dynatree/src/jquery.dynatree.js') }}"></script>
+
     {# To only use a subset or add more js overwrite and copy paste this block
     To speed up page loads save a copy of jQuery in your project and override this block to include the correct path
     Otherwise the regeneration is done on every load in dev more with use_controller: true
