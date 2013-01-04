@@ -3,15 +3,11 @@
  */
 ul.dynatree-container
 {
-	font-family: tahoma, arial, helvetica;
-	font-size: 10pt; /* font size should not be too big */
 	white-space: nowrap;
 	padding: 3px;
-	margin: 0; /* issue 201 */
-	background-color: white;
-	border: 1px dotted gray;
+	margin: 0;
 	overflow: auto;
-	height: 100%; /* issue 263 */
+	height: 100%;
 }
 
 ul.dynatree-container ul
@@ -22,12 +18,7 @@ ul.dynatree-container ul
 
 ul.dynatree-container li
 {
-	list-style-image: none;
-	list-style-position: outside;
-	list-style-type: none;
-	-moz-background-clip:border;
-	-moz-background-inline-policy: continuous;
-	-moz-background-origin: padding;
+	list-style: none;
 	background-attachment: scroll;
 	background-color: transparent;
 	background-position: 0 0;
@@ -35,7 +26,7 @@ ul.dynatree-container li
 	background-image: none;  /* no v-lines */
 
 	margin:0;
-	padding:1px 0 0 0;
+	padding:5px 0 0 0;
 }
 /* Suppress lines for last child node */
 ul.dynatree-container li.dynatree-lastsib
@@ -72,9 +63,7 @@ span.dynatree-drag-helper-img,
 {
 	width: 16px;
 	height: 16px;
-/*	display: -moz-inline-box; /* @ FF 1+2 removed for issue 221*/
-/*	-moz-box-align: start; /* issue 221 */
-	display: inline-block; /* Required to make a span sizeable */
+	display: inline-block;
 	vertical-align: top;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -293,14 +282,8 @@ ul.dynatree-container a
 	color: black; /* inherit doesn't work on IE */
 	text-decoration: none;
 	vertical-align: top;
-	margin: 0px;
-	margin-left: 3px;
-/*	outline: 0; /* @ Firefox, prevent dotted border after click */
-	/* Set transparent border to prevent jumping when active node gets a border
-	   (we can do this, because this theme doesn't use vertical lines)
-	   */
-	border: 1px solid white; /* Note: 'transparent' would not work in IE6 */
-
+	margin: 0 0 0 3px;
+	border: 1px solid transparent; /* Note: 'transparent' would not work in IE6 */
 }
 
 ul.dynatree-container a:hover
