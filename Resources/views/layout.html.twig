@@ -76,7 +76,7 @@
 </footer>
 
 <script type="text/javascript">
-	(function($){
+	$(function($){
 		// LOADER
 		$('#ns-loader').css('opacity', 0);
 
@@ -120,7 +120,15 @@
 				}
 			}).disableSelection();
 		});
-	})(jQuery);
+
+		// CONFIRM BUTTONS
+		$('.ns-confirm').click(function(){
+			if (confirm('Вы уверены?')) {
+				location.href = $(this).attr('href');
+			}
+			return false;
+		});
+	});
 </script>
 
 {% block foot_script %}
