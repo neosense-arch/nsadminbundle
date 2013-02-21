@@ -1,5 +1,5 @@
 parameters:
-    ns_admin.service.class: 'NS\AdminBundle\Service\AdmionService'
+    ns_admin.service.class: 'NS\AdminBundle\Service\AdminService'
 
 services:
     ns_admin.menu_builder:
@@ -17,4 +17,4 @@ services:
 
     ns_admin.service:
         class: %ns_admin.service.class%
-        arguments: [%ns_admin.bundles%]
+        arguments: [%ns_admin.bundles%, @kernel]
