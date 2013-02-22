@@ -13,8 +13,6 @@
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
     {% endstylesheets %}
 
-    <link href="{{ asset('bundles/nsadmin/elrte/css/smoothness/jquery-ui-1.8.13.custom.css') }}" type="text/css" rel="stylesheet" media="screen"/>
-    <link href="{{ asset('bundles/nsadmin/elrte/css/elrte.min.css') }}" type="text/css" rel="stylesheet" media="screen"/>
     <link href="{{ asset('bundles/nsadmin/dynatree-bootstrap-skin/ui.dynatree.css') }}" type="text/css" rel="stylesheet" media="screen"/>
 
 	{# HEAD JS block #}
@@ -132,10 +130,6 @@
 </script>
 
 {% block foot_script %}
-	{# Elrte #}
-	<script src="{{ asset('bundles/nsadmin/elrte/js/elrte.full.js') }}"></script>
-	<script src="{{ asset('bundles/nsadmin/elrte/js/i18n/elrte.ru.js') }}"></script>
-
 	{# Dynatree #}
 	<script src="{{ asset('bundles/nsadmin/dynatree/jquery/jquery.cookie.js') }}"></script>
 	<script src="{{ asset('bundles/nsadmin/dynatree/dist/jquery.dynatree.min.js') }}"></script>
@@ -162,6 +156,8 @@
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+	{{ tinymce_init() }}
 {% endblock foot_script %}
 
 </body>
