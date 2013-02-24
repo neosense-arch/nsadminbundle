@@ -2,13 +2,9 @@
 
 namespace NS\AdminBundle\Menu;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use NS\AdminBundle\Service\AdminService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Symfony\Component\HttpKernel\Kernel;
-
 use Symfony\Component\Yaml\Yaml;
-
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
@@ -19,7 +15,7 @@ use Knp\Menu\Matcher\Voter\VoterInterface;
  * Admin panel menu builder
  *
  */
-class Builder extends ContainerAware
+class Builder
 {
 	/**
 	 * Factory
@@ -28,22 +24,30 @@ class Builder extends ContainerAware
 	private $factory;
 
 	/**
-	 * Bundles
-	 * @var string[]
+	 * Admin service
+	 * @var AdminService
 	 */
-	private $bundles;
+	private $adminService;
+
+	/**
+	 * Menu matcher
+	 * @var Matcher
+	 */
+	private $matcher;
 
 	/**
 	 * Constructor
 	 *
 	 * @param  FactoryInterface $factory
-	 * @param  string[] $bundles
+	 * @param  AdminService     $adminService
+	 * @param  Matcher          $matcher
 	 * @return Builder
 	 */
-	public function __construct(FactoryInterface $factory, array $bundles)
+	public function __construct(FactoryInterface $factory, AdminService $adminService, Matcher $matcher)
 	{
 		$this->factory = $factory;
-		$this->bundles = $bundles;
+		$this->adminService = $adminService;
+		$this->matcher = $matcher;
 	}
 
 	/**
@@ -54,7 +58,7 @@ class Builder extends ContainerAware
 	public function createMainMenu()
 	{
 		// adding route voter to menu matcher
-		$this->getMatcher()->addVoter($this->createVoter());
+		$this->matcher->addVoter($this->createVoter());
 
 		// root node
 		$menu = $this->factory
@@ -63,14 +67,13 @@ class Builder extends ContainerAware
 		;
 
 		// adding bundles' menus
-		foreach ($this->bundles as $bundleName) {
-			$bundle = $this->getKernel()->getBundle($bundleName);
+		foreach ($this->adminService->getActiveBundles() as $bundle) {
 			$fileName = $bundle->getPath() . '/Resources/config/ns_admin.navigation.yml';
 			if (file_exists($fileName)) {
 				$yml = file_get_contents($fileName);
 				foreach (Yaml::parse($yml) as $data) {
 					$item = $this->convertDataFormat($data);
-					$item['routeParameters']['adminBundle'] = $bundleName;
+					$item['routeParameters']['adminBundle'] = $bundle->getName();
 
 					$menu->addChild($this->factory->createFromArray($item));
 				}
@@ -124,26 +127,6 @@ class Builder extends ContainerAware
 		}
 
 		return $item;
-	}
-
-	/**
-	 * Retrieves menu matcher
-	 *
-	 * @return Matcher
-	 */
-	private function getMatcher()
-	{
-		return $this->container->get('knp_menu.matcher');
-	}
-
-	/**
-	 * Retrieves kernel
-	 *
-	 * @return Kernel
-	 */
-	private function getKernel()
-	{
-		return $this->container->get('kernel');
 	}
 
 	/**
