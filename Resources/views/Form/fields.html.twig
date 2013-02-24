@@ -1,20 +1,3 @@
-{% block elrte_widget %}
-    <script type="text/javascript" charset="utf-8">
-        $().ready(function () {
-            var opts = {
-                cssClass: 'el-rte',
-                lang: 'ru',
-                height: 450,
-                toolbar: 'complete'
-            }
-            $('#{{ form.vars.id }}').attr('required', null);
-            $('#{{ form.vars.id }}').elrte(opts);
-        });
-    </script>
-
-    {{ block('textarea_widget') }}
-{% endblock %}
-
 {% block ns_image_widget %}
 	{% if value %}
 		<div id="{{ form.vars.id }}_preview">
