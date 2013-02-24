@@ -1,10 +1,28 @@
 parameters:
-    ns_admin.service.class: 'NS\AdminBundle\Service\AdminService'
+    ns_admin.service.class:                  'NS\AdminBundle\Service\AdminService'
+    ns_admin.menu.resolver.collection.class: 'NS\AdminBundle\Menu\Resolver\MenuResolverCollection'
+    ns_admin.menu.resolver.bundles.class:    'NS\AdminBundle\Menu\Resolver\BundlesMenuResolver'
+    ns_admin.menu.resolver.settings.class:   'NS\AdminBundle\Menu\Resolver\SettingsMenuResolver'
 
 services:
+    ns_admin.menu.resolver.collection:
+        class: %ns_admin.menu.resolver.collection.class%
+
+    ns_admin.menu.resolver.bundles:
+        class: %ns_admin.menu.resolver.bundles.class%
+        arguments: [@ns_admin.service, @knp_menu.factory]
+        tags:
+            - { name: ns_admin.menu.resolver }
+
+    ns_admin.menu.resolver.settings:
+        class: %ns_admin.menu.resolver.settings.class%
+        arguments: [@ns_admin.service, @knp_menu.factory]
+        tags:
+            - { name: ns_admin.menu.resolver }
+
     ns_admin.menu_builder:
         class: NS\AdminBundle\Menu\Builder
-        arguments: [@knp_menu.factory, @ns_admin.service, @knp_menu.matcher]
+        arguments: [@knp_menu.factory, @ns_admin.service, @knp_menu.matcher, @ns_admin.menu.resolver.collection]
 
     ns_admin.menu.main:
         class: Knp\Menu\MenuItem

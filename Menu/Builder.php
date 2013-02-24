@@ -2,6 +2,8 @@
 
 namespace NS\AdminBundle\Menu;
 
+use NS\AdminBundle\Menu\Resolver\MenuResolverCollection;
+use NS\AdminBundle\Menu\Resolver\MenuResolverInterface;
 use NS\AdminBundle\Service\AdminService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml;
@@ -18,36 +20,40 @@ use Knp\Menu\Matcher\Voter\VoterInterface;
 class Builder
 {
 	/**
-	 * Factory
 	 * @var FactoryInterface
 	 */
 	private $factory;
 
 	/**
-	 * Admin service
 	 * @var AdminService
 	 */
 	private $adminService;
 
 	/**
-	 * Menu matcher
 	 * @var Matcher
 	 */
 	private $matcher;
 
 	/**
+	 * @var MenuResolverCollection
+	 */
+	private $resolvers;
+
+	/**
 	 * Constructor
 	 *
-	 * @param  FactoryInterface $factory
-	 * @param  AdminService     $adminService
-	 * @param  Matcher          $matcher
+	 * @param  FactoryInterface       $factory
+	 * @param  AdminService           $adminService
+	 * @param  Matcher                $matcher
+	 * @param  MenuResolverCollection $resolvers
 	 * @return Builder
 	 */
-	public function __construct(FactoryInterface $factory, AdminService $adminService, Matcher $matcher)
+	public function __construct(FactoryInterface $factory, AdminService $adminService, Matcher $matcher, MenuResolverCollection $resolvers)
 	{
-		$this->factory = $factory;
+		$this->factory      = $factory;
 		$this->adminService = $adminService;
-		$this->matcher = $matcher;
+		$this->matcher      = $matcher;
+		$this->resolvers    = $resolvers;
 	}
 
 	/**
@@ -63,70 +69,15 @@ class Builder
 		// root node
 		$menu = $this->factory
 			->createItem('root')
-			->setChildrenAttribute('class', 'nav')
-		;
+			->setChildrenAttribute('class', 'nav');
 
-		// adding bundles' menus
-		foreach ($this->adminService->getActiveBundles() as $bundle) {
-			$fileName = $bundle->getPath() . '/Resources/config/ns_admin.navigation.yml';
-			if (file_exists($fileName)) {
-				$yml = file_get_contents($fileName);
-				foreach (Yaml::parse($yml) as $data) {
-					$item = $this->convertDataFormat($data);
-					$item['routeParameters']['adminBundle'] = $bundle->getName();
-
-					$menu->addChild($this->factory->createFromArray($item));
-				}
-			}
+		// forming menu
+		/** @var MenuResolverInterface $resolver */
+		foreach ($this->resolvers as $resolver) {
+			$resolver->resolve($menu);
 		}
 
 		return $menu;
-	}
-
-	/**
-	 * Converts data format from ns_admin.navigation format to KNP-Menu
-	 *
-	 * @param  array $data
-	 * @throws \Exception
-	 * @return array
-	 */
-	private function convertDataFormat(array $data)
-	{
-		// required params
-		if (empty($data['label'])) {
-			throw new \Exception('Required attribute "label" is missing');
-		}
-		if (empty($data['action'])) {
-			throw new \Exception('Required attribute "action" is missing');
-		}
-
-		// if action value is empty ("mycontroller:" or "mycontroller")
-		// using default value "index"
-		$action = trim($data['action'], ':');
-
-		// exploding route params (with default action value)
-		$params = explode(':', $action) + array(null, 'index');
-
-		// retrieving knp-menu formatted item config array
-		$item = array(
-			'name'  => uniqid(),
-			'label' => $data['label'],
-			'route' => 'ns_admin_bundle',
-			'routeParameters' => array(
-				'adminBundle'     => null,
-				'adminController' => $params[0],
-				'adminAction'     => $params[1],
-			),
-		);
-
-		// recursively adding child items
-		if (!empty($data['pages'])) {
-			foreach ($data['pages'] as $page) {
-				$item['children'][] = $this->convertDataFormat($page);
-			}
-		}
-
-		return $item;
 	}
 
 	/**
