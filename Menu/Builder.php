@@ -4,13 +4,11 @@ namespace NS\AdminBundle\Menu;
 
 use NS\AdminBundle\Menu\Resolver\MenuResolverCollection;
 use NS\AdminBundle\Menu\Resolver\MenuResolverInterface;
-use NS\AdminBundle\Service\AdminService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
-use Knp\Menu\Matcher\Voter\UriVoter;
 use Knp\Menu\Matcher\Voter\VoterInterface;
 
 /**
@@ -23,11 +21,6 @@ class Builder
 	 * @var FactoryInterface
 	 */
 	private $factory;
-
-	/**
-	 * @var AdminService
-	 */
-	private $adminService;
 
 	/**
 	 * @var Matcher
@@ -43,28 +36,27 @@ class Builder
 	 * Constructor
 	 *
 	 * @param  FactoryInterface       $factory
-	 * @param  AdminService           $adminService
 	 * @param  Matcher                $matcher
 	 * @param  MenuResolverCollection $resolvers
 	 * @return Builder
 	 */
-	public function __construct(FactoryInterface $factory, AdminService $adminService, Matcher $matcher, MenuResolverCollection $resolvers)
+	public function __construct(FactoryInterface $factory, Matcher $matcher, MenuResolverCollection $resolvers)
 	{
-		$this->factory      = $factory;
-		$this->adminService = $adminService;
-		$this->matcher      = $matcher;
-		$this->resolvers    = $resolvers;
+		$this->factory   = $factory;
+		$this->matcher   = $matcher;
+		$this->resolvers = $resolvers;
 	}
 
 	/**
 	 * Creates main menu
 	 *
+	 * @param VoterInterface $voter
 	 * @return ItemInterface
 	 */
-	public function createMainMenu()
+	public function createMainMenu(VoterInterface $voter)
 	{
 		// adding route voter to menu matcher
-		$this->matcher->addVoter($this->createVoter());
+		$this->matcher->addVoter($voter);
 
 		// root node
 		$menu = $this->factory
@@ -81,22 +73,19 @@ class Builder
 	}
 
 	/**
-	 * Retrieves menu voter
+	 * Creates submenu
 	 *
-	 * @return VoterInterface
+	 * @param  ItemInterface $mainMenu
+	 * @return ItemInterface|null
 	 */
-	private function createVoter()
+	public function createSubMenu(ItemInterface $mainMenu)
 	{
-		// retrieving current request
-		$request = Request::createFromGlobals();
-
-		// cropping query string
-		$uri = $request->getRequestUri();
-		$uri = str_replace($request->getQueryString(), '', $uri);
-
-		// trimming trailing "?"
-		$uri = rtrim($uri, '?');
-
-		return new UriVoter($uri);
+		/** @var ItemInterface $item */
+		foreach ($mainMenu->getChildren() as $item) {
+			if ($this->matcher->isCurrent($item) || $this->matcher->isAncestor($item)) {
+				return $item;
+			}
+		}
+		return null;
 	}
 }

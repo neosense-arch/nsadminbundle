@@ -1,8 +1,11 @@
 parameters:
     ns_admin.service.class:                  'NS\AdminBundle\Service\AdminService'
+    ns_admin.menu.builder.class:             'NS\AdminBundle\Menu\Builder'
     ns_admin.menu.resolver.collection.class: 'NS\AdminBundle\Menu\Resolver\MenuResolverCollection'
     ns_admin.menu.resolver.bundles.class:    'NS\AdminBundle\Menu\Resolver\BundlesMenuResolver'
     ns_admin.menu.resolver.settings.class:   'NS\AdminBundle\Menu\Resolver\SettingsMenuResolver'
+    ns_admin.menu.main.class:                'Knp\Menu\MenuItem'
+    ns_admin.menu.main.voter.class:          'NS\AdminBundle\Menu\Matcher\Voter\AdminVoter'
 
 services:
     ns_admin.menu.resolver.collection:
@@ -20,16 +23,32 @@ services:
         tags:
             - { name: ns_admin.menu.resolver }
 
-    ns_admin.menu_builder:
-        class: NS\AdminBundle\Menu\Builder
-        arguments: [@knp_menu.factory, @ns_admin.service, @knp_menu.matcher, @ns_admin.menu.resolver.collection]
+    ns_admin.menu.builder:
+        class: %ns_admin.menu.builder.class%
+        arguments: [@knp_menu.factory, @knp_menu.matcher, @ns_admin.menu.resolver.collection]
 
     ns_admin.menu.main:
-        class: Knp\Menu\MenuItem
-        factory_service: ns_admin.menu_builder
+        class: %ns_admin.menu.main.class%
+        factory_service: ns_admin.menu.builder
         factory_method: createMainMenu
+        arguments: [@ns_admin.menu.main.voter]
+        scope: request
         tags:
             - { name: knp_menu.menu, alias: main }
+
+    ns_admin.menu.main.voter:
+        class: %ns_admin.menu.main.voter.class%
+        arguments: [@request]
+        scope: request
+
+    ns_admin.menu.submenu:
+        class: %ns_admin.menu.main.class%
+        factory_service: ns_admin.menu.builder
+        factory_method: createSubMenu
+        arguments: [@ns_admin.menu.main]
+        scope: request
+        tags:
+            - { name: knp_menu.menu, alias: submenu }
 
     ns_admin.service:
         class: %ns_admin.service.class%

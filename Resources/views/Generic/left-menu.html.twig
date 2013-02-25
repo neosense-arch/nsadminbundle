@@ -1,0 +1,14 @@
+<div class="well">
+	{% set submenu = knp_menu_get('submenu') %}
+
+	<ul class="nav nav-list">
+		{% for item in submenu %}
+			<li class="nav-header">{{ item.label }}</li>
+			{% if item.hasChildren %}
+				{% for subitem in item %}
+					<li><a href="{{ subitem.uri }}">{{ subitem.label }}</a></li>
+				{% endfor %}
+			{% endif %}
+		{% endfor %}
+	</ul>
+</div>

@@ -2,6 +2,7 @@
 
 namespace NS\AdminBundle\Controller;
 
+use NS\AdminBundle\Service\AdminService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,7 +32,10 @@ class DefaultController extends Controller
 	 */
 	public function bundleAction($adminBundle, $adminController, $adminAction)
 	{
-		$adminController = 'Admin' . ucfirst($adminController);
-		return $this->forward("{$adminBundle}:{$adminController}:{$adminAction}");
+		/** @var $service AdminService */
+		$service = $this->get('ns_admin.service');
+
+		$controller = $service->getAdminRouteController($adminBundle, $adminController, $adminAction);
+		return $this->forward($controller);
 	}
 }

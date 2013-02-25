@@ -42,6 +42,7 @@ class BundlesMenuResolver implements MenuResolverInterface
 	 */
 	public function resolve(ItemInterface $menu)
 	{
+		// adding bundles' menus
 		foreach ($this->adminService->getActiveBundles() as $bundle) {
 			$fileName = $this->getBundleNavigationFileName($bundle);
 			if (file_exists($fileName)) {
@@ -69,20 +70,19 @@ class BundlesMenuResolver implements MenuResolverInterface
 	 */
 	private function createMenuItem(array $data, $bundleName)
 	{
-		$item = $this->convertDataFormat($data);
-		$item['routeParameters']['adminBundle'] = $bundleName;
-
+		$item = $this->convertDataFormat($data, $bundleName);
 		return $this->factory->createFromArray($item);
 	}
 
 	/**
 	 * Converts data format from ns_admin.navigation format to KNP-Menu
 	 *
-	 * @param  array $data
+	 * @param  array  $data
+	 * @param  string $bundleName
 	 * @throws \Exception
 	 * @return array
 	 */
-	private function convertDataFormat(array $data)
+	private function convertDataFormat(array $data, $bundleName)
 	{
 		// required params
 		if (empty($data['label'])) {
@@ -98,6 +98,8 @@ class BundlesMenuResolver implements MenuResolverInterface
 
 		// exploding route params (with default action value)
 		$params = explode(':', $action) + array(null, 'index');
+		$adminController = $params[0];
+		$adminAction = $params[1];
 
 		// retrieving knp-menu formatted item config array
 		$item = array(
@@ -105,16 +107,20 @@ class BundlesMenuResolver implements MenuResolverInterface
 			'label' => $data['label'],
 			'route' => 'ns_admin_bundle',
 			'routeParameters' => array(
-				'adminBundle'     => null,
-				'adminController' => $params[0],
-				'adminAction'     => $params[1],
+				'adminBundle'     => $bundleName,
+				'adminController' => $adminController,
+				'adminAction'     => $adminAction,
 			),
+			'extras' => array(
+				'controller' => $this->adminService->getAdminRouteController($bundleName, $adminController, $adminAction),
+			),
+			'displayChildren' => false
 		);
 
 		// recursively adding child items
 		if (!empty($data['pages'])) {
 			foreach ($data['pages'] as $page) {
-				$item['children'][] = $this->convertDataFormat($page);
+				$item['children'][] = $this->convertDataFormat($page, $bundleName);
 			}
 		}
 

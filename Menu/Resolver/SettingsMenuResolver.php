@@ -76,6 +76,10 @@ class SettingsMenuResolver implements MenuResolverInterface
 				'adminController' => 'settings',
 				'adminAction'     => 'index',
 			),
+			'extras' => array(
+				'controller' => 'NSAdminBundle:AdminSettings:index'
+			),
+			'displayChildren' => false
 		));
 		$menu->addChild($item);
 

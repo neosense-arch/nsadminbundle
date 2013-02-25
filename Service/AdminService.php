@@ -55,4 +55,18 @@ final class AdminService
 			return in_array($bundle->getName(), $bundles);
 		});
 	}
+
+	/**
+	 * Transforms admin route params to controller name
+	 *
+	 * @param string $adminBundle
+	 * @param string $adminController
+	 * @param string $adminAction
+	 * @return string
+	 */
+	public function getAdminRouteController($adminBundle, $adminController, $adminAction)
+	{
+		$adminController = 'Admin' . ucfirst($adminController);
+		return "{$adminBundle}:{$adminController}:{$adminAction}";
+	}
 }
