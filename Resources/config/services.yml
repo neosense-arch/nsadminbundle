@@ -21,7 +21,7 @@ services:
         class: %ns_admin.menu.resolver.settings.class%
         arguments: [@ns_admin.service, @knp_menu.factory]
         tags:
-            - { name: ns_admin.menu.resolver }
+            - { name: ns_admin.menu.resolver.tmp }
 
     ns_admin.menu.builder:
         class: %ns_admin.menu.builder.class%
