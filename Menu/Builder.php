@@ -82,7 +82,7 @@ class Builder
 	{
 		/** @var ItemInterface $item */
 		foreach ($mainMenu->getChildren() as $item) {
-			if ($this->matcher->isCurrent($item) || $this->matcher->isAncestor($item)) {
+			if ($this->matcher->isAncestor($item)) {
 				return $item;
 			}
 		}

@@ -1,0 +1,16 @@
+{% extends 'NSAdminBundle::layout.html.twig' %}
+
+{% block content %}
+	<div class="row">
+		<div class="span3">
+			{#{% include 'NSAdminBundle:Generic:left-menu.html.twig' %}#}
+			{{ knp_menu_render('main', { template: 'NSAdminBundle:Generic:left-menu.html.twig' }, 'twig') }}
+		</div>
+		<div class="span9">
+			<form method="post" {{ form_enctype(form) }} autocomplete="off">
+				{{ form_widget(form, {label: form_label }) }}
+				<button class="btn btn-success">Сохранить</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}

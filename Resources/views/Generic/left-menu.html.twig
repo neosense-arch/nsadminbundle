@@ -1,14 +1,41 @@
-<div class="well">
-	{% set submenu = knp_menu_get('submenu') %}
+{% macro attributes(attributes) %}
+	{% for name, value in attributes %}
+		{%- if value is not none and value is not sameas(false) -%}
+			{{- ' %s="%s"'|format(name, value is sameas(true) ? name|e : value|e)|raw -}}
+		{%- endif -%}
+	{%- endfor -%}
+{% endmacro %}
 
-	<ul class="nav nav-list">
-		{% for item in submenu %}
-			<li class="nav-header">{{ item.label }}</li>
-			{% if item.hasChildren %}
-				{% for subitem in item %}
-					<li><a href="{{ subitem.uri }}">{{ subitem.label }}</a></li>
-				{% endfor %}
+{% block compressed_root %}
+{% spaceless %}
+{{ block('root') }}
+{% endspaceless %}
+{% endblock %}
+
+{% block root %}
+	{% if item.hasChildren %}
+		{% for subitem in item.children %}
+			{% if matcher.isCurrent(subitem) or matcher.isAncestor(subitem) %}
+				<div class="well">
+					{% set submenu = subitem %}
+					{{ block('headers') }}
+				</div>
 			{% endif %}
 		{% endfor %}
-	</ul>
-</div>
+	{% endif %}
+{% endblock %}
+
+{% block headers %}
+	{% if submenu.hasChildren %}
+		<ul class="nav nav-list">
+			{% for item in submenu %}
+				<li class="nav-header">{{ item.label }}</li>
+				{% if item.hasChildren %}
+					{% for subitem in item %}
+						<li{% if matcher.isCurrent(subitem) or matcher.isAncestor(subitem) %} class="active"{% endif %}><a href="{{ subitem.uri }}">{{ subitem.label }}</a></li>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}

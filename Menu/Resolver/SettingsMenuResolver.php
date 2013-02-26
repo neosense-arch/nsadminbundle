@@ -73,7 +73,7 @@ class SettingsMenuResolver implements MenuResolverInterface
 			'route' => 'ns_admin_bundle',
 			'routeParameters' => array(
 				'adminBundle'     => 'NSAdminBundle',
-				'adminController' => 'settings',
+				'adminController' => 'Settings',
 				'adminAction'     => 'index',
 			),
 			'extras' => array(
