@@ -1,0 +1,129 @@
+{#
+	Side panel tree widget
+	@var string $id                tree container unique identifier
+	@var string $header            header title
+	@var string $itemsJson         Dynatree items in JSON format
+	@var string $selectedId        [optional] selected node ID (if defined node will be automatically selected)
+	@var string $addButtonLabel    [optional] add button text
+	@var string $editButtonLabel   [optional] edit button text
+	@var string $deleteButtonLabel [optional] delete button text
+	@var string $activateUrl       [optional] URL to redirect page after node activate (you can use {key} as node key placeholder)
+	@var string $reorderUrl        [optional] URL to call after node drop
+
+	Events available
+	@event post-init()                runs after init
+	@event node-activate($key)        runs on node activation
+	@event node-reorder($key, $index) runs after node drop
+#}
+
+<div id="{{ id }}">
+	<h5>{{ header }}</h5>
+	<div class="ns-tree"></div>
+	<div class="btn-group">
+		<a href="#" class="btn btn-mini btn-add" title="{{ addButtonLabel|default('Добавить') }}"><i class="icon-plus"></i></a>
+		<a href="#" class="btn btn-mini disabled btn-edit" title="{{ editButtonLabel|default('Редактировать') }}"><i class="icon-pencil"></i></a>
+		<a href="#" class="btn btn-mini disabled btn-delete" title="{{ deleteButtonLabel|default('Удалить') }}"><i class="icon-trash"></i></a>
+	</div>
+</div>
+
+{# Tree JS #}
+<script type="text/javascript">
+	$(function(){
+		{# Main variables definition #}
+		var id     = '#{{ id }}',          el   = $(id),
+			treeId = '#{{ id }} .ns-tree', tree = $(treeId);
+
+		{# Tree initialization #}
+		tree.dynatree({
+			debugLevel: 0,
+			children: {{ itemsJson|raw }},
+			onPostInit: function() {
+				el.trigger('post-init');
+			},
+			onActivate: function(node) {
+				el.trigger('node-activate', node.data.key);
+			},
+			dnd: {
+				preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
+				onDragStart: function(node) {
+					return true;
+				},
+				onDragEnter: function(node, sourceNode) {
+					if(node.parent !== sourceNode.parent){
+						return false;
+					}
+					return ["before", "after"];
+				},
+				onDrop: function(node, sourceNode, hitMode, ui, draggable) {
+					sourceNode.move(node, hitMode);
+
+					var nodeId = +sourceNode.data.key;
+					var index = $(sourceNode.getParent().getChildren()).index(sourceNode);
+
+					el.trigger('node-reorder', nodeId, index);
+				}
+			}
+		});
+
+		{# Activates selected node after initialization #}
+		{% if selectedId is defined and selectedId %}
+			el.on('post-init', function(){
+				var node = tree.getNodeByKey('{{ selectedId }}');
+				if (node) {
+					node.activateSilently();
+					if (node.hasChildren()) {
+						node.expand();
+					}
+				}
+			});
+		{% endif %}
+
+		{# Redirects page on node activation #}
+		{% if activateUrl is defined %}
+			el.on('node-activate', function(e, key){
+				location.href = '{{ activateUrl }}'.replace('{key}', key);
+			});
+		{% endif %}
+
+		{# Saves new nodes order #}
+		{% if reorderUrl is defined %}
+			el.on('node-reorder', function(e, nodeId, index){
+				// saving position
+				$('#ns-loader').animate({'opacity': 1});
+				$.ajax({
+					'url': '{{ reorderUrl }}',
+					'data': {
+						'nodeId': nodeId,
+						'position': index
+					}
+				})
+				.done(function(res){
+					if (res && typeof(res.error) != 'undefined') {
+						throw res.error;
+					}
+				})
+				.always(function(){
+					$('#ns-loader').animate({'opacity': 0});
+				});
+			});
+		{% endif %}
+
+		{# Add button click #}
+		el.find('.btn-add').click(function(){
+			el.trigger('add-click');
+		});
+		{% if selectedId is defined %}
+			{# Edit button click #}
+			el.find('.btn-edit').click(function(){
+				el.trigger('edit-click', {{ selectedId }});
+			}).removeClass('disabled');
+
+			{# Delete button click #}
+			el.find('.btn-delete').click(function(){
+				if (confirm('Вы уверены?')) {
+					el.trigger('delete-click', {{ selectedId }});
+				}
+			}).removeClass('disabled');
+		{% endif %}
+	});
+</script>
