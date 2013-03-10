@@ -14,6 +14,9 @@
 	@event post-init()                runs after init
 	@event node-activate($key)        runs on node activation
 	@event node-reorder($key, $index) runs after node drop
+	@event add-click()                runs on add button click
+	@event edit-click($key)           runs on edit button click
+	@event delete-click($key)         runs on delete button click
 #}
 
 <div id="{{ id }}">
@@ -111,19 +114,27 @@
 		{# Add button click #}
 		el.find('.btn-add').click(function(){
 			el.trigger('add-click');
+			return false;
 		});
-		{% if selectedId is defined %}
-			{# Edit button click #}
-			el.find('.btn-edit').click(function(){
-				el.trigger('edit-click', {{ selectedId }});
-			}).removeClass('disabled');
 
-			{# Delete button click #}
-			el.find('.btn-delete').click(function(){
+		{# Edit button click #}
+		el.find('.btn-edit').click(function(){
+			{% if selectedId is defined %}
+				$(this).removeClass('disabled');
+				el.trigger('edit-click', {{ selectedId }});
+			{% endif %}
+			return false;
+		});
+
+		{# Delete button click #}
+		el.find('.btn-delete').click(function(){
+			{% if selectedId is defined %}
+				$(this).removeClass('disabled');
 				if (confirm('Вы уверены?')) {
 					el.trigger('delete-click', {{ selectedId }});
 				}
-			}).removeClass('disabled');
-		{% endif %}
+			{% endif %}
+			return false;
+		});
 	});
 </script>
