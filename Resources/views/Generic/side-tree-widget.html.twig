@@ -22,10 +22,11 @@
 <div id="{{ id }}">
 	<h5>{{ header }}</h5>
 	<div class="ns-tree"></div>
+	<hr>
 	<div class="btn-group">
-		<a href="#" class="btn btn-mini btn-add" title="{{ addButtonLabel|default('Добавить') }}"><i class="icon-plus"></i></a>
-		<a href="#" class="btn btn-mini disabled btn-edit" title="{{ editButtonLabel|default('Редактировать') }}"><i class="icon-pencil"></i></a>
-		<a href="#" class="btn btn-mini disabled btn-delete" title="{{ deleteButtonLabel|default('Удалить') }}"><i class="icon-trash"></i></a>
+		<a href="#" class="btn btn-small btn-add" title="{{ addButtonLabel|default('Добавить') }}"><i class="icon-plus"></i></a>
+		<a href="#" class="btn btn-small disabled btn-edit" title="{{ editButtonLabel|default('Редактировать') }}"><i class="icon-pencil"></i></a>
+		<a href="#" class="btn btn-small disabled btn-delete" title="{{ deleteButtonLabel|default('Удалить') }}"><i class="icon-trash"></i></a>
 	</div>
 </div>
 
@@ -36,12 +37,12 @@
 		var id     = '#{{ id }}',          el   = $(id),
 			treeId = '#{{ id }} .ns-tree', tree = $(treeId);
 
-		{# Tree initialization #}
-		tree.dynatree({
+		{# Tree config #}
+		var treeConfig = {
 			debugLevel: 0,
 			children: {{ itemsJson|raw }},
 			onPostInit: function() {
-				el.trigger('post-init');
+				el.trigger('post-init', this);
 			},
 			onActivate: function(node) {
 				el.trigger('node-activate', node.data.key);
@@ -66,11 +67,11 @@
 					el.trigger('node-reorder', nodeId, index);
 				}
 			}
-		});
+		};
 
 		{# Activates selected node after initialization #}
 		{% if selectedId is defined and selectedId %}
-			el.on('post-init', function(){
+			el.on('post-init', function(e, tree){
 				var node = tree.getNodeByKey('{{ selectedId }}');
 				if (node) {
 					node.activateSilently();
@@ -119,7 +120,7 @@
 
 		{# Edit button click #}
 		el.find('.btn-edit').click(function(){
-			{% if selectedId is defined %}
+			{% if selectedId is defined and selectedId %}
 				$(this).removeClass('disabled');
 				el.trigger('edit-click', {{ selectedId }});
 			{% endif %}
@@ -128,7 +129,7 @@
 
 		{# Delete button click #}
 		el.find('.btn-delete').click(function(){
-			{% if selectedId is defined %}
+			{% if selectedId is defined and selectedId %}
 				$(this).removeClass('disabled');
 				if (confirm('Вы уверены?')) {
 					el.trigger('delete-click', {{ selectedId }});
@@ -136,5 +137,8 @@
 			{% endif %}
 			return false;
 		});
+
+		{# Tree initialization #}
+		tree.dynatree(treeConfig);
 	});
 </script>
