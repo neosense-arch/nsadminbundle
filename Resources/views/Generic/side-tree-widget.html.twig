@@ -9,9 +9,10 @@
 	@var string $deleteButtonLabel [optional] delete button text
 	@var string $activateUrl       [optional] URL to redirect page after node activate (you can use {key} as node key placeholder)
 	@var string $reorderUrl        [optional] URL to call after node drop
+	@var bool   $enableDnd         [optional] enables drag-n-drop
 
 	Events available
-	@event post-init()                runs after init
+	@event post-init($tree)           runs after init
 	@event node-activate($key)        runs on node activation
 	@event node-reorder($key, $index) runs after node drop
 	@event add-click()                runs on add button click
@@ -24,9 +25,20 @@
 	<div class="ns-tree"></div>
 	<hr>
 	<div class="btn-group">
-		<a href="#" class="btn btn-small btn-add" title="{{ addButtonLabel|default('Добавить') }}"><i class="icon-plus"></i></a>
-		<a href="#" class="btn btn-small disabled btn-edit" title="{{ editButtonLabel|default('Редактировать') }}"><i class="icon-pencil"></i></a>
-		<a href="#" class="btn btn-small disabled btn-delete" title="{{ deleteButtonLabel|default('Удалить') }}"><i class="icon-trash"></i></a>
+		<a href="#"
+			class="btn btn-small btn-add"
+			title="{{ addButtonLabel|default('Добавить') }}">
+			<i class="icon-plus"></i></a>
+
+		<a href="#"
+			class="btn btn-small btn-edit{% if not selectedId is defined or not selectedId %} disabled{% endif %}"
+			title="{{ editButtonLabel|default('Редактировать') }}">
+			<i class="icon-pencil"></i></a>
+
+		<a href="#"
+			class="btn btn-small btn-delete{% if not selectedId is defined or not selectedId %} disabled{% endif %}"
+			title="{{ deleteButtonLabel|default('Удалить') }}">
+			<i class="icon-trash"></i></a>
 	</div>
 </div>
 
@@ -46,27 +58,29 @@
 			},
 			onActivate: function(node) {
 				el.trigger('node-activate', node.data.key);
-			},
-			dnd: {
-				preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
-				onDragStart: function(node) {
-					return true;
-				},
-				onDragEnter: function(node, sourceNode) {
-					if(node.parent !== sourceNode.parent){
-						return false;
-					}
-					return ["before", "after"];
-				},
-				onDrop: function(node, sourceNode, hitMode, ui, draggable) {
-					sourceNode.move(node, hitMode);
-
-					var nodeId = +sourceNode.data.key;
-					var index = $(sourceNode.getParent().getChildren()).index(sourceNode);
-
-					el.trigger('node-reorder', nodeId, index);
-				}
 			}
+			{% if enableDnd is defined and enableDnd %}
+				,dnd: {
+					preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
+					onDragStart: function(node) {
+						return true;
+					},
+					onDragEnter: function(node, sourceNode) {
+						if(node.parent !== sourceNode.parent){
+							return false;
+						}
+						return ["before", "after"];
+					},
+					onDrop: function(node, sourceNode, hitMode, ui, draggable) {
+						sourceNode.move(node, hitMode);
+
+						var nodeId = +sourceNode.data.key;
+						var index = $(sourceNode.getParent().getChildren()).index(sourceNode);
+
+						el.trigger('node-reorder', nodeId, index);
+					}
+				}
+			{% endif %}
 		};
 
 		{# Activates selected node after initialization #}
@@ -121,7 +135,6 @@
 		{# Edit button click #}
 		el.find('.btn-edit').click(function(){
 			{% if selectedId is defined and selectedId %}
-				$(this).removeClass('disabled');
 				el.trigger('edit-click', {{ selectedId }});
 			{% endif %}
 			return false;
@@ -130,7 +143,6 @@
 		{# Delete button click #}
 		el.find('.btn-delete').click(function(){
 			{% if selectedId is defined and selectedId %}
-				$(this).removeClass('disabled');
 				if (confirm('Вы уверены?')) {
 					el.trigger('delete-click', {{ selectedId }});
 				}
