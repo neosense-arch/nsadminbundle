@@ -49,3 +49,124 @@
 		</div>
 	{% endspaceless %}
 {% endblock %}
+
+{% block ns_multi_image_widget %}
+	{% spaceless %}
+		<style type="text/css">
+			.ns-multi-image {
+				border: solid 1px #ccc;
+				border-radius: 10px;
+				padding: 10px;
+				overflow: hidden;
+			}
+			.ns-multi-image .drop-container {
+				border: solid 3px transparent;
+				margin-bottom: 5px;
+				padding: 10px 10px 0 10px;
+			}
+			.ns-multi-image .drop-container.in {
+				border: dashed 3px #ccc;
+				border-radius: 5px;
+			}
+			.ns-multi-image .drop-container .thumbnail {
+				margin-left: 20px;
+				margin-bottom: 10px;
+			}
+			.ns-multi-image .thumbnail .progress {
+				display: none;
+				margin-bottom: 0;
+				margin-top: -20px;
+				position: relative;
+			}
+			.ns-multi-image .thumbnail img {
+				height: 128px;
+				width: 128px;
+			}
+			.ns-multi-image .thumbnail.in-progress .progress {
+				display: block;
+			}
+		</style>
+
+		<div id="{{ form.vars.id }}_control_group" class="control-group ns-multi-image">
+			{{ form_label(form) }}
+			{{ form_errors(form) }}
+
+			<div class="drop-container">
+				<ul class="thumbnails"></ul>
+			</div>
+
+			<span class="btn btn-mini fileinput-button">
+            	<i class="icon-plus"></i>
+				<span>Добавить...</span>
+				<input id="fileupload_{{ form.vars.id }}" type="file" name="fu_{{ form.vars.id }}_files[]" multiple>
+				<input id="fileupload_{{ form.vars.id }}_hidden" type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %} />
+			</span>
+
+			<script>
+				$(function(){
+					var id = '{{ form.vars.id }}';
+					var el = $('#fileupload_' + id);
+					var elHidden = $('#fileupload_' + id + '_hidden');
+					var container = $('#' + id + '_control_group').find('.drop-container');
+					var elFiles = container.find('.thumbnails');
+
+					var fnAddThumb = function() {
+						var img = $('<img/>').attr('src', '{{ asset('bundles/nsadmin/images/loader-big.gif') }}');
+						var thumb = $('<li class="thumbnail"/>').append(img);
+						elFiles.append(thumb);
+						return thumb;
+					};
+
+					var fnToHidden = function() {
+						var a = [];
+						elFiles.find('.thumbnail').each(function(idx, elFile){
+							a.push($(elFile).data('name'));
+						});
+						elHidden.val(a.join(';'));
+					};
+
+					el.fileupload({
+						url: '{{ url('ns_admin_bundle', { adminBundle: 'NSAdminBundle', adminController: 'ImageUploader', adminAction: 'upload' }) }}',
+						dataType: 'json',
+						dropZone: container,
+						add: function (e, data) {
+							data.thumb = fnAddThumb();
+							data.submit();
+						},
+						done: function (e, data) {
+							if (data.result.error) {
+								alert(data.result.error);
+							}
+							data.thumb.data('name', data.result.name);
+							data.thumb.find('img').attr('src', data.result.preview);
+							fnToHidden();
+						}
+					});
+
+					$(document).bind('drop dragover', function (e) {
+						e.preventDefault();
+					});
+
+					$(document).bind('dragover', function (e) {
+						var timeout = window.dropZoneTimeout;
+						if (!timeout) {
+							container.addClass('in');
+						} else {
+							clearTimeout(timeout);
+						}
+						if (e.target === container[0]) {
+							container.addClass('hover');
+						} else {
+							container.removeClass('hover');
+						}
+						window.dropZoneTimeout = setTimeout(function () {
+							window.dropZoneTimeout = null;
+							container.removeClass('in hover');
+						}, 100);
+					});
+				});
+			</script>
+
+		</div>
+	{% endspaceless %}
+{% endblock %}

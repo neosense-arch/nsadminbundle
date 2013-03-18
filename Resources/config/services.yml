@@ -1,11 +1,13 @@
 parameters:
     ns_admin.service.class:                  'NS\AdminBundle\Service\AdminService'
+    ns_admin.service.uploader.class:         'NS\AdminBundle\Service\UploaderService'
     ns_admin.menu.builder.class:             'NS\AdminBundle\Menu\Builder'
     ns_admin.menu.resolver.collection.class: 'NS\AdminBundle\Menu\Resolver\MenuResolverCollection'
     ns_admin.menu.resolver.bundles.class:    'NS\AdminBundle\Menu\Resolver\BundlesMenuResolver'
     ns_admin.menu.resolver.settings.class:   'NS\AdminBundle\Menu\Resolver\SettingsMenuResolver'
     ns_admin.menu.main.class:                'Knp\Menu\MenuItem'
     ns_admin.menu.main.voter.class:          'NS\AdminBundle\Menu\Matcher\Voter\AdminVoter'
+    ns_admin.form.type.ns_multi_image.class: 'NS\AdminBundle\Form\Type\MultiImageType'
 
 services:
     ns_admin.menu.resolver.collection:
@@ -53,3 +55,12 @@ services:
     ns_admin.service:
         class: %ns_admin.service.class%
         arguments: [%ns_admin.bundles%, @kernel]
+
+    ns_admin.service.uploader:
+        class: %ns_admin.service.uploader.class%
+        arguments: [ @imagine.twig.extension ]
+
+    ns_admin.form.type.ns_multi_image:
+        class: %ns_admin.form.type.ns_multi_image.class%
+        tags:
+            - { name: form.type, alias: ns_multi_image }
