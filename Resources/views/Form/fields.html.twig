@@ -104,18 +104,33 @@
 
 			<script>
 				$(function(){
-					var id = '{{ form.vars.id }}';
-					var el = $('#fileupload_' + id);
-					var elHidden = $('#fileupload_' + id + '_hidden');
-					var container = $('#' + id + '_control_group').find('.drop-container');
-					var elFiles = container.find('.thumbnails');
+					var id          = '{{ form.vars.id }}';
+					var elInput     = $('#fileupload_' + id);
+					var elHidden    = $('#fileupload_' + id + '_hidden');
+					var elContainer = $('#' + id + '_control_group').find('.drop-container');
+					var elFiles     = elContainer.find('.thumbnails');
 
-					var fnAddThumb = function() {
-						var img = $('<img/>').attr('src', '{{ asset('bundles/nsadmin/images/loader-big.gif') }}');
+					var fnAddThumb = function(name, preview) {
+						name = name || '';
+						preview = preview || '{{ asset('bundles/nsadmin/images/loader-big.gif') }}';
+
+						var img = $('<img/>').attr('src', preview);
 						var thumb = $('<li class="thumbnail"/>').append(img);
 						elFiles.append(thumb);
+
+						if (name) {
+							thumb.data('name', name);
+						}
+
 						return thumb;
 					};
+
+
+					{% if value is not empty %}
+						{% for file in value|split(';') %}
+							fnAddThumb('{{ file }}', '{{ ('upload/j/' ~ file) | apply_filter('ns_admin_preview') }}');
+						{% endfor %}
+					{% endif %}
 
 					var fnToHidden = function() {
 						var a = [];
@@ -125,10 +140,10 @@
 						elHidden.val(a.join(';'));
 					};
 
-					el.fileupload({
+					elInput.fileupload({
 						url: '{{ url('ns_admin_bundle', { adminBundle: 'NSAdminBundle', adminController: 'ImageUploader', adminAction: 'upload' }) }}',
 						dataType: 'json',
-						dropZone: container,
+						dropZone: elContainer,
 						add: function (e, data) {
 							data.thumb = fnAddThumb();
 							data.submit();
@@ -150,18 +165,18 @@
 					$(document).bind('dragover', function (e) {
 						var timeout = window.dropZoneTimeout;
 						if (!timeout) {
-							container.addClass('in');
+							elContainer.addClass('in');
 						} else {
 							clearTimeout(timeout);
 						}
-						if (e.target === container[0]) {
-							container.addClass('hover');
+						if (e.target === elContainer[0]) {
+							elContainer.addClass('hover');
 						} else {
-							container.removeClass('hover');
+							elContainer.removeClass('hover');
 						}
 						window.dropZoneTimeout = setTimeout(function () {
 							window.dropZoneTimeout = null;
-							container.removeClass('in hover');
+							elContainer.removeClass('in hover');
 						}, 100);
 					});
 				});
