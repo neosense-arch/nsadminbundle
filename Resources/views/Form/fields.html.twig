@@ -63,6 +63,7 @@
 				border: solid 3px transparent;
 				margin-bottom: 5px;
 				padding: 10px 10px 0 10px;
+				position: relative;
 			}
 			.ns-multi-image .drop-container.in {
 				border: dashed 3px #ccc;
@@ -85,28 +86,41 @@
 			.ns-multi-image .thumbnail.in-progress .progress {
 				display: block;
 			}
+			.ns-multi-image .btn-delete {
+				display: none;
+				left: 0;
+				position: absolute;
+				top: 0;
+			}
 		</style>
 
 		<div id="{{ form.vars.id }}_control_group" class="control-group ns-multi-image">
+			{# Default fields #}
 			{{ form_label(form) }}
 			{{ form_errors(form) }}
 
+			{# Thumbnails container #}
 			<div class="drop-container">
 				<ul class="thumbnails"></ul>
+				<button id="fileupload_{{ form.vars.id }}_delete" class="btn btn-mini btn-delete"><i class="icon-trash"></i></button>
 			</div>
 
+			{# Add button #}
 			<span class="btn btn-mini fileinput-button">
             	<i class="icon-plus"></i>
 				<span>Добавить...</span>
 				<input id="fileupload_{{ form.vars.id }}" type="file" name="fu_{{ form.vars.id }}_files[]" multiple>
-				<input id="fileupload_{{ form.vars.id }}_hidden" type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %} />
 			</span>
+
+			{# Main hidden field contains real model value #}
+			<input id="fileupload_{{ form.vars.id }}_hidden" type="hidden" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}"{% endif %} />
 
 			<script>
 				$(function(){
 					var id          = '{{ form.vars.id }}';
 					var elInput     = $('#fileupload_' + id);
 					var elHidden    = $('#fileupload_' + id + '_hidden');
+					var elDelete    = $('#fileupload_' + id + '_delete');
 					var elContainer = $('#' + id + '_control_group').find('.drop-container');
 					var elFiles     = elContainer.find('.thumbnails');
 
@@ -178,6 +192,24 @@
 							window.dropZoneTimeout = null;
 							elContainer.removeClass('in hover');
 						}, 100);
+					});
+
+					{# Delete button #}
+					elFiles.find('.thumbnail').mouseover(function(){
+						var thumb = $(this);
+						elDelete.css({
+							left: thumb.position().left + thumb.width() - elDelete.width() + 9 + 'px',
+							top:  thumb.position().top + 7 + 'px'
+						}).show();
+						elDelete.data('thumb', thumb);
+					});
+					elDelete.click(function(){
+						if (!confirm('Вы уверены?')) {
+							return false;
+						}
+						elDelete.data('thumb').remove();
+						fnToHidden();
+						return false;
 					});
 				});
 			</script>
