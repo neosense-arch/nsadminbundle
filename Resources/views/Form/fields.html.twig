@@ -136,6 +136,15 @@
 							thumb.data('name', name);
 						}
 
+						thumb.mouseover(function(){
+							var thumb = $(this);
+							elDelete.css({
+								left: thumb.position().left + thumb.width() - elDelete.width() + 9 + 'px',
+								top:  thumb.position().top + 7 + 'px'
+							}).show();
+							elDelete.data('thumb', thumb);
+						});
+
 						return thumb;
 					};
 
@@ -195,14 +204,6 @@
 					});
 
 					{# Delete button #}
-					elFiles.find('.thumbnail').mouseover(function(){
-						var thumb = $(this);
-						elDelete.css({
-							left: thumb.position().left + thumb.width() - elDelete.width() + 9 + 'px',
-							top:  thumb.position().top + 7 + 'px'
-						}).show();
-						elDelete.data('thumb', thumb);
-					});
 					elDelete.click(function(){
 						if (!confirm('Вы уверены?')) {
 							return false;

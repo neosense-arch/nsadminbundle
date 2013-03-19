@@ -165,17 +165,11 @@
 
 	{{ tinymce_init() }}
 
-	<!-- The Templates plugin is included to render the upload/download listings -->
-	{#<script src="http://blueimp.github.com/JavaScript-Templates/tmpl.min.js"></script>#}
-
 	<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
 	<script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
 
 	<!-- The Canvas to Blob plugin is included for image resizing functionality -->
 	<script src="http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js"></script>
-
-	<!-- Bootstrap JS and Bootstrap Image Gallery are not required, but included for the demo -->
-	{#<script src="http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>#}
 
 	<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 	<script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/jquery.iframe-transport.js') }}"></script>
@@ -185,14 +179,6 @@
 
 	<!-- The File Upload file processing plugin -->
 	<script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/jquery.fileupload-fp.js') }}"></script>
-
-	<!-- The File Upload user interface plugin -->
-	{#<script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/jquery.fileupload-ui.js') }}"></script>#}
-	<!-- The main application script -->
-	{#<script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/main.js') }}"></script>#}
-	<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
-	{#<!--[if gte IE 8]><script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/cors/jquery.xdr-transport.js') }}"></script><![endif]-->#}
-
 
 	<script src="https://raw.github.com/betamax/getImageData/master/jquery.getimagedata.min.js"></script>
 {% endblock foot_script %}
