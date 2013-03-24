@@ -13,10 +13,12 @@
         <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
     {% endstylesheets %}
 
-    <link href="{{ asset('bundles/nsadmin/dynatree-bootstrap-skin/ui.dynatree.css') }}" type="text/css" rel="stylesheet" media="screen"/>
-	<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/bootstrap-image-gallery.min.css') }}" rel="stylesheet" />
-	<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui.css') }}" rel="stylesheet">
-	<noscript><link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}" rel="stylesheet"></noscript>
+	{% block styles %}
+		<link href="{{ asset('bundles/nsadmin/dynatree-bootstrap-skin/ui.dynatree.css') }}" type="text/css" rel="stylesheet" media="screen"/>
+		<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/bootstrap-image-gallery.min.css') }}" rel="stylesheet" />
+		<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui.css') }}" rel="stylesheet">
+		<noscript><link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}" rel="stylesheet"></noscript>
+	{% endblock %}
 
 	{# HEAD JS block #}
 	{% block javascripts %}
