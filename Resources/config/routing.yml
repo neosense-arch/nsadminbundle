@@ -1,4 +1,8 @@
 ns_admin_index:
+    pattern:  /admin
+    defaults: { _controller: NSAdminBundle:Default:index }
+
+ns_admin_index_dash:
     pattern:  /admin/
     defaults: { _controller: NSAdminBundle:Default:index }
 
