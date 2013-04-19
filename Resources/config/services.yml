@@ -8,6 +8,7 @@ parameters:
     ns_admin.menu.main.class:                'Knp\Menu\MenuItem'
     ns_admin.menu.main.voter.class:          'NS\AdminBundle\Menu\Matcher\Voter\AdminVoter'
     ns_admin.form.type.ns_multi_image.class: 'NS\AdminBundle\Form\Type\MultiImageType'
+    ns_admin.form.type.tinymce.class:        'NS\AdminBundle\Form\Type\TinyMceType'
 
 services:
     ns_admin.menu.resolver.collection:
@@ -64,3 +65,8 @@ services:
         class: %ns_admin.form.type.ns_multi_image.class%
         tags:
             - { name: form.type, alias: ns_multi_image }
+
+    ns_admin.form.type.tinymce:
+        class: %ns_admin.form.type.tinymce.class%
+        tags:
+            - { name: form.type, alias: tinymce }
