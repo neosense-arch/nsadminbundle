@@ -99,7 +99,7 @@
 		{# Redirects page on node activation #}
 		{% if activateUrl is defined %}
 			el.on('node-activate', function(e, key){
-				location.href = '{{ activateUrl }}'.replace('{key}', key);
+				location.href = '{{ activateUrl|raw }}'.replace('{key}', key);
 			});
 		{% endif %}
 
