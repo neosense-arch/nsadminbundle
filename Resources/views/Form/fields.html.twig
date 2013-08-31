@@ -156,11 +156,15 @@
 					{% endif %}
 
 					var fnToHidden = function() {
-						var a = [];
-						elFiles.find('.thumbnail').each(function(idx, elFile){
-							a.push($(elFile).data('name'));
-						});
-						elHidden.val(a.join(';'));
+						{% if multiple %}
+							var a = [];
+							elFiles.find('.thumbnail').each(function(idx, elFile){
+								a.push($(elFile).data('name'));
+							});
+							elHidden.val(a.join(';'));
+						{% else %}
+							elHidden.val(elFiles.find('.thumbnail:first').data('name'));
+						{% endif %}
 					};
 
 					elInput.fileupload({
