@@ -36,6 +36,12 @@ class DefaultController extends Controller
 		$service = $this->get('ns_admin.service');
 
 		$controller = $service->getAdminRouteController($adminBundle, $adminController, $adminAction);
-		return $this->forward($controller);
+		$path = array(
+			'adminBundle'     => $adminBundle,
+			'adminController' => $adminController,
+			'adminAction'     => $adminAction,
+		);
+
+		return $this->forward($controller, $path);
 	}
 }
