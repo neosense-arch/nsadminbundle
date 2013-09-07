@@ -1,11 +1,5 @@
 (function($){
 	$.fn.numberPicker = function(options){
-		// methods
-		if (typeof(options) === 'string') {
-			return this;
-		}
-
-
 		// settings
 		var settings = $.extend({
 			plus:  null,
@@ -16,7 +10,7 @@
 
 		// direct input filtration
 		this.keyup(function(){
-			this.value = filterValue(this.value, settings.min, settings.max);
+			setValue(this, filterValue(this.value, settings.min, settings.max));
 		});
 
 		// for each element in stack
@@ -142,7 +136,7 @@
 				value = max;
 			}
 
-			input.val(value);
+			setValue(input, value);
 			return false;
 		}
 	};
@@ -162,4 +156,14 @@
 			'user-select':           'none'
 		});
 	};
+
+	/**
+	 * Sets input value and triggers change event
+	 *
+	 * @param el
+	 * @param value
+	 */
+	var setValue = function(el, value) {
+		$(el).val(value).trigger('change');
+	}
 })(jQuery);
