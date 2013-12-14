@@ -43,7 +43,16 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="brand" href="{{ path('ns_admin_index') }}">Engine</a>
+			<style type="text/css">
+				.brand img {
+					opacity: 0.6;
+				}
+				.brand:hover img {
+					opacity: 0.9;
+				}
+ 			</style>
+
+            <a class="brand" href="{{ path('ns_admin_index') }}"><img src="{{ asset('bundles/nsadmin/images/home.png') }}"></a>
 
             <div class="nav-collapse collapse">
 				{% if is_granted("ROLE_ADMIN") %}
@@ -77,7 +86,7 @@
                 <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
             {% endif %}
         </p>
-        NS Content Management System &copy; 2012 NS
+        &copy;&nbsp;2012&mdash;{{ "now"|date("Y") }} ООО <a href="http://neosense.ru" target="_blank">«Неосенс»</a>
     </div>
 </footer>
 
