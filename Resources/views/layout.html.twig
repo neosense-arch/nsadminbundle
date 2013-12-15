@@ -76,17 +76,18 @@
 <footer class="footer">
     <hr/>
     <div class="container">
-        <p class="pull-right">
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-                <a href="{{ path('fos_user_security_logout') }}">
-                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                </a>
-            {% else %}
-                <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-            {% endif %}
+        <p class="pull-right ns-sincerely">
+			{#&copy;&nbsp;2012&mdash;{{ "now"|date("Y") }} ООО <a href="http://neosense.ru" target="_blank">«Неосенс»</a>#}
+			<a href="http://neosense.ru" target="_blank">Sincerely</a>
         </p>
-        &copy;&nbsp;2012&mdash;{{ "now"|date("Y") }} ООО <a href="http://neosense.ru" target="_blank">«Неосенс»</a>
+		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+			{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+			<a href="{{ path('fos_user_security_logout') }}">
+				{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+			</a>
+		{% else %}
+			<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+		{% endif %}
     </div>
 </footer>
 
