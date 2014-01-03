@@ -80,11 +80,12 @@
 			<a href="http://neosense.ru" target="_blank">Sincerely</a>
         </p>
 		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-			<i class="icon-user"></i>&nbsp;{{ app.user.username }} |
+			{{ app.user.username }} |
 			<a href="{{ url('fos_user_security_logout') }}">выйти</a>
 		{% else %}
 			<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
 		{% endif %}
+		({{ ns_core_version() }})
     </div>
 </footer>
 
