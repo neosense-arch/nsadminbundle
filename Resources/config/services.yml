@@ -12,6 +12,11 @@ parameters:
     ns_admin.menu.main.voter.class:          'NS\AdminBundle\Menu\Matcher\Voter\AdminVoter'
 
 services:
+    ns_admin.form.type.ns_file_select:
+        class: 'NS\AdminBundle\Form\Type\FileSelectType'
+        tags:
+            - { name: form.type, alias: ns_file_select }
+
     ns_admin.form.type.ns_multi_image:
         class: %ns_admin.form.type.ns_multi_image.class%
         tags:
