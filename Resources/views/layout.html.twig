@@ -20,6 +20,10 @@
 		<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/bootstrap-image-gallery.min.css') }}" rel="stylesheet" />
 		<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui.css') }}" rel="stylesheet">
 		<noscript><link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}" rel="stylesheet"></noscript>
+
+        {% if form is defined %}
+            {{ form_stylesheet(form) }}
+        {% endif %}
 	{% endblock %}
 
 	{# HEAD JS block #}
@@ -30,6 +34,10 @@
 		{# jQuery #}
 		<script src="{{ asset('bundles/nsadmin/jquery/jquery.min.js') }}"></script>
 		<script src="{{ asset('bundles/nsadmin/jquery/jquery-ui.min.js') }}"></script>
+
+        {% if form is defined %}
+            {{ form_javascript(form) }}
+        {% endif %}
 	{% endblock %}
 </head>
 
