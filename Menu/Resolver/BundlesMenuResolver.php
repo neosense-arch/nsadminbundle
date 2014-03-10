@@ -113,6 +113,7 @@ class BundlesMenuResolver implements MenuResolverInterface
 			),
 			'extras' => array(
 				'controller' => $this->adminService->getAdminRouteController($bundleName, $adminController, $adminAction),
+                'position'   => $this->getDataPosition($data),
 			),
 			'displayChildren' => false
 		);
@@ -126,4 +127,30 @@ class BundlesMenuResolver implements MenuResolverInterface
 
 		return $item;
 	}
+
+    /**
+     * @param array $data
+     * @return int
+     */
+    private function getDataPosition($data)
+    {
+        // default value
+        if (!isset($data['position'])) {
+            return 50;
+        }
+
+        // named positions
+        $dataPosition = $data['position'];
+        $map = array(
+            'last'   => 100,
+            'first'  => 0,
+            'normal' => 50,
+        );
+        if (isset($map[$dataPosition])) {
+            return $map[$dataPosition];
+        }
+
+        // numbered positions
+        return (int)$dataPosition;
+    }
 }

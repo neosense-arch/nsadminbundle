@@ -69,6 +69,15 @@ class Builder
 			$resolver->resolve($menu);
 		}
 
+        // reordering
+        $positions = array();
+        /** @var ItemInterface $node */
+        foreach ($menu->getChildren() as $node) {
+            $positions[$node->getName()] = $node->getExtra('position', 50);
+        }
+        array_multisort($positions, SORT_ASC, array_values($positions));
+        $menu->reorderChildren(array_keys($positions));
+
 		return $menu;
 	}
 

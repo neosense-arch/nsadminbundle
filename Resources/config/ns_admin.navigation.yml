@@ -1,0 +1,4 @@
+-
+    label:  "Настройки"
+    action: "admin:settings"
+    position: "last"
