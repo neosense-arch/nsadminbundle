@@ -47,12 +47,13 @@ class Builder
 		$this->resolvers = $resolvers;
 	}
 
-	/**
-	 * Creates main menu
-	 *
-	 * @param VoterInterface $voter
-	 * @return ItemInterface
-	 */
+    /**
+     * Creates main menu
+     *
+     * @param VoterInterface $voter
+     * @throws \Exception
+     * @return ItemInterface
+     */
 	public function createMainMenu(VoterInterface $voter)
 	{
 		// adding route voter to menu matcher
@@ -68,6 +69,20 @@ class Builder
 		foreach ($this->resolvers as $resolver) {
 			$resolver->resolve($menu);
 		}
+
+        // parent option
+        /** @var ItemInterface $node */
+        foreach ($menu->getChildren() as $node) {
+            $parentName = $node->getExtra('parent');
+            if ($parentName) {
+                $parent = $menu->getChild($parentName);
+                if (!$parent) {
+                    throw new \Exception("Menu item named '{$parentName}' wasn't found");
+                }
+                $menu->removeChild($node);
+                $parent->addChild($node);
+            }
+        }
 
         // reordering
         $positions = array();
@@ -91,7 +106,8 @@ class Builder
 	{
 		/** @var ItemInterface $item */
 		foreach ($mainMenu->getChildren() as $item) {
-			if ($this->matcher->isAncestor($item)) {
+			if ($this->matcher->isCurrent($item) || $this->matcher->isAncestor($item)) {
+                $item->setDisplayChildren(true);
 				return $item;
 			}
 		}
