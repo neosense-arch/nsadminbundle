@@ -13,7 +13,7 @@ class AdminToolsController extends Controller
 	 * @throws \Exception
 	 * @return Response
 	 */
-	public function phpinfoAction()
+	public function infoAction()
 	{
         // cms info
         /** @var VersionService $versionService */
@@ -26,7 +26,7 @@ class AdminToolsController extends Controller
         ob_end_clean();
         $phpInfo = preg_replace( '%^.*<body>(.*)</body>.*$%ms','$1',$phpInfo);
 
-		return $this->render('NSAdminBundle:AdminTools:phpinfo.html.twig', array(
+		return $this->render('NSAdminBundle:AdminTools:info.html.twig', array(
             'phpInfo'    => $phpInfo,
             'cmsVersion' => $versionService->getVersion(),
         ));

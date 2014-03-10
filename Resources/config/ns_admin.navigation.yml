@@ -10,6 +10,6 @@
     position: "last"
     icon: "icon-wrench"
 -
-    label:  "Информация PHP"
+    label:  "Информация"
     parent: "settings"
-    action: "tools:phpinfo"
+    action: "tools:info"
