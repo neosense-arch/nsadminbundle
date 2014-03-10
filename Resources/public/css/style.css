@@ -49,9 +49,56 @@ form .control-group textarea {
     opacity: 1;
 }
 
+/*** SINCERELY ***/
 .ns-sincerely a {
 	font-family: 'Allura', cursive;
 	font-size: 20px;
 	background: url('/bundles/nsadmin/images/ns.png') no-repeat 100% 50%;
 	padding: 10px 55px 0 0;
 }
+
+/*** PHPINFO ***/
+.ns-phpinfo table,
+.ns-phpinfo tbody,
+.ns-phpinfo tr {
+    clear: left;
+    display: block;
+    position: relative;
+    width: 100%;
+}
+.ns-phpinfo table {
+    margin: 0 0 20px 0;
+    overflow: hidden;
+}
+.ns-phpinfo h2 {
+    clear: left;
+}
+.ns-phpinfo table td {
+    border: solid 1px #ccc;
+}
+.ns-phpinfo .e,
+.ns-phpinfo .v,
+.ns-phpinfo .h th {
+    display: block;
+    float: left;
+    height: 30px;
+}
+.ns-phpinfo .e {
+    width: 25%;
+}
+.ns-phpinfo .v {
+    overflow: hidden;
+    word-wrap: break-word;
+    width: 35%;
+}
+.ns-phpinfo .h th:nth-child(1) {
+    width: 25%;
+}
+.ns-phpinfo .h th:nth-child(2),
+.ns-phpinfo .h th:nth-child(3) {
+    width: 35%;
+}
+.ns-phpinfo table:first-child a {
+    display: none;
+}
+

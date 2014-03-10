@@ -9,3 +9,7 @@
     action: "settings:index"
     position: "last"
     icon: "icon-wrench"
+-
+    label:  "Информация PHP"
+    parent: "settings"
+    action: "tools:phpinfo"
