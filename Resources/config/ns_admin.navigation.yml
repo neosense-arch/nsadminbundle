@@ -1,4 +1,10 @@
 -
+    label:  "Главная"
+    action: "index:index"
+    position: "first"
+    icon: "icon-home"
+-
     label:  "Настройки"
-    action: "admin:settings"
+    action: "settings:index"
     position: "last"
+    icon: "icon-wrench"

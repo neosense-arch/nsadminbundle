@@ -114,6 +114,7 @@ class BundlesMenuResolver implements MenuResolverInterface
 			'extras' => array(
 				'controller' => $this->adminService->getAdminRouteController($bundleName, $adminController, $adminAction),
                 'position'   => $this->getDataPosition($data),
+                'icon'       => !empty($data['icon']) ? $data['icon'] : null,
 			),
 			'displayChildren' => false
 		);

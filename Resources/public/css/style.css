@@ -14,6 +14,10 @@ form .control-group textarea {
 [class*=" icon-"] {
 	background-image: url(/bundles/mopabootstrap/img/glyphicons-halflings.png) !important;
 }
+[class^="icon-white"],
+[class*=" icon-white"] {
+	background-image: url(/bundles/mopabootstrap/img/glyphicons-halflings-white.png) !important;
+}
 
 .loader {
 	background: url(/bundles/nsadmin/images/loader.gif);
@@ -34,6 +38,14 @@ form .control-group textarea {
 }
 .multi-action .btn-group {
 	padding-left: 13px;
+}
+
+/*** NAVBAR ***/
+.navbar .nav li a .icon-white {
+    opacity: 0.5;
+}
+.navbar .nav li a:hover .icon-white {
+    opacity: 1;
 }
 
 .ns-sincerely a {
