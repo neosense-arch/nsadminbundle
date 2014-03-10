@@ -103,7 +103,7 @@ class BundlesMenuResolver implements MenuResolverInterface
 
 		// retrieving knp-menu formatted item config array
 		$item = array(
-			'name'  => uniqid(),
+			'name'  => !empty($data['name']) ? $data['name'] : uniqid(),
 			'label' => $data['label'],
 			'route' => 'ns_admin_bundle',
 			'routeParameters' => array(
