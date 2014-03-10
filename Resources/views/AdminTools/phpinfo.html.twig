@@ -5,7 +5,18 @@
 {% endblock %}
 
 {% block content_content %}
-    <div class="ns-phpinfo">
-        {{ phpInfo|raw }}
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#info-system" data-toggle="tab">Система</a></li>
+        <li><a href="#info-php" data-toggle="tab">PHP</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="info-system">
+            <p>Версия системы управления: {{ cmsVersion }}</p>
+            <p>Производитель: <a href="http://neosense.ru">neosense.ru</a></p>
+            <p>Срок годности: не ограничен</p>
+        </div>
+        <div class="tab-pane ns-phpinfo" id="info-php">
+            {{ phpInfo|raw }}
+        </div>
     </div>
 {% endblock %}
