@@ -87,7 +87,7 @@
 {% block label %}
     {%- spaceless %}
         {% if item.extras.icon is defined and item.extras.icon %}
-            <i class="{{ item.extras.icon }} icon-white"></i>&nbsp;
+            <i class="{{ item.extras.icon }} icon-white"></i>
         {% endif %}
         {% if options.allow_safe_labels and item.getExtra('safe_label', false) %}
             {{ item.label|raw }}
