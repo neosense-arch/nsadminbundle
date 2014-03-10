@@ -1,0 +1,7 @@
+{% extends 'NSAdminBundle:Layout:col2.html.twig' %}
+
+{% block content_left %}
+    <div class="well">
+        {{ knp_menu_render('submenu', { currentClass: 'active', ancestorClass: 'active', template: 'NSAdminBundle:Menu:left-menu.html.twig' }) }}
+    </div>
+{% endblock %}

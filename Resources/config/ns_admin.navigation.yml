@@ -5,6 +5,7 @@
     icon: "icon-home"
 -
     label:  "Настройки"
+    name: "settings"
     action: "settings:index"
     position: "last"
     icon: "icon-wrench"

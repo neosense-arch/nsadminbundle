@@ -44,7 +44,8 @@ form .control-group textarea {
 .navbar .nav li a .icon-white {
     opacity: 0.5;
 }
-.navbar .nav li a:hover .icon-white {
+.navbar .nav li a:hover .icon-white,
+.navbar .nav li.active a .icon-white {
     opacity: 1;
 }
 
