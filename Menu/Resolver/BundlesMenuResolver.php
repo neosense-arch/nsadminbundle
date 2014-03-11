@@ -144,9 +144,11 @@ class BundlesMenuResolver implements MenuResolverInterface
         // named positions
         $dataPosition = $data['position'];
         $map = array(
-            'last'   => 100,
-            'first'  => 0,
-            'normal' => 50,
+            'first'     => 0,
+            'beginning' => 10,
+            'normal'    => 50,
+            'end'       => 90,
+            'last'      => 100,
         );
         if (isset($map[$dataPosition])) {
             return $map[$dataPosition];
