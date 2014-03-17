@@ -86,11 +86,6 @@
 
 {% block label %}
     {%- spaceless %}
-        {#{% if item.extras.icon is defined and item.extras.icon %}#}
-            {#<i class="{{ item.extras.icon }}"></i>#}
-        {#{% else %}#}
-            {#<i class="icon-wrench"></i>#}
-        {#{% endif %}#}
         {% if options.allow_safe_labels and item.getExtra('safe_label', false) %}
             {{ item.label|raw }}
         {% else %}

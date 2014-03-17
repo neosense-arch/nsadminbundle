@@ -7,6 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Knp\Menu\ItemInterface;
 
+/**
+ * Class AdminToolsController
+ *
+ * @package NS\AdminBundle\Controller
+ */
 class AdminToolsController extends Controller
 {
 	/**

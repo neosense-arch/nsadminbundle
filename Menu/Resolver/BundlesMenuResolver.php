@@ -84,40 +84,46 @@ class BundlesMenuResolver implements MenuResolverInterface
 	 */
 	private function convertDataFormat(array $data, $bundleName)
 	{
-		// required params
-		if (empty($data['label'])) {
-			throw new \Exception('Required attribute "label" is missing');
-		}
-		if (empty($data['action'])) {
-			throw new \Exception('Required attribute "action" is missing');
-		}
+        $route           = null;
+        $routeParameters = null;
+        $uri             = null;
 
-		// if action value is empty ("mycontroller:" or "mycontroller")
-		// using default value "index"
-		$action = trim($data['action'], ':');
+        // admin route parameters
+        if (!empty($data['action'])) {
+            // if action value is empty ("mycontroller:" or "mycontroller")
+            // using default value "index"
+            $action = trim($data['action'], ':');
 
-		// exploding route params (with default action value)
-		$params = explode(':', $action) + array(null, 'index');
-		$adminController = $params[0];
-		$adminAction = $params[1];
+            // exploding route params (with default action value)
+            $params = explode(':', $action) + array(null, 'index');
+            $adminController = $params[0];
+            $adminAction = $params[1];
+
+            $route = 'ns_admin_bundle';
+            $routeParameters = array(
+                'adminBundle'     => $bundleName,
+                'adminController' => $adminController,
+                'adminAction'     => $adminAction,
+            );
+        }
+        else {
+            $uri = '#';
+        }
 
 		// retrieving knp-menu formatted item config array
 		$item = array(
-			'name'  => !empty($data['name']) ? $data['name'] : uniqid(),
-			'label' => $data['label'],
-			'route' => 'ns_admin_bundle',
-			'routeParameters' => array(
-				'adminBundle'     => $bundleName,
-				'adminController' => $adminController,
-				'adminAction'     => $adminAction,
-			),
-			'extras' => array(
-                'controller' => $this->adminService->getAdminRouteController($bundleName, $adminController, $adminAction),
+            'name'            => !empty($data['name']) ? $data['name'] : uniqid(),
+            'label'           => !empty($data['label']) ? $data['label'] : uniqid(),
+            'display'         => !isset($data['display']),
+            'route'           => $route,
+            'routeParameters' => $routeParameters,
+            'uri'             => $uri,
+            'extras'          => array(
+//                'controller' => $this->adminService->getAdminRouteController($bundleName, $adminController, $adminAction),
                 'position'   => $this->getDataPosition($data),
                 'icon'       => !empty($data['icon']) ? $data['icon'] : null,
                 'parent'     => !empty($data['parent']) ? $data['parent'] : null,
-			),
-			'displayChildren' => false
+            ),
 		);
 
 		// recursively adding child items

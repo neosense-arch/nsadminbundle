@@ -63,7 +63,7 @@
 
             <div class="nav-collapse collapse">
 				{% if is_granted("ROLE_ADMIN") %}
-					{{ knp_menu_render('main', { currentClass: 'active', ancestorClass: 'active', template: 'NSAdminBundle:Menu:main-menu.html.twig' }) }}
+					{{ knp_menu_render('main', { currentClass: 'active', ancestorClass: 'active', template: 'NSAdminBundle:Menu:main-menu.html.twig', depth:1 }) }}
 				{% endif %}
             </div>
 

@@ -6,9 +6,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Knp\Menu\ItemInterface;
 
+/**
+ * Class AdminSettingsController
+ *
+ * @package NS\AdminBundle\Controller
+ */
 class AdminSettingsController extends Controller
 {
 	/**
+     * Redirects to first settings subpage
+     *
 	 * @throws \Exception
 	 * @return Response
 	 */
