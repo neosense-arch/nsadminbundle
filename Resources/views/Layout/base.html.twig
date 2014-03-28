@@ -6,21 +6,19 @@
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {# Bootstrap from CDN #}
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" />
-
-    {% stylesheets filter='cssrewrite'
-        '@NSAdminBundle/Resources/public/css/style.css'
-        '@NSAdminBundle/Resources/public/select2-3.4.5/select2.css'
-    %}
-        <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen"/>
-    {% endstylesheets %}
-
+    {# HEAD STYLES #}
 	{% block styles %}
-		<link href="{{ asset('bundles/nsadmin/dynatree-bootstrap-skin/ui.dynatree.css') }}" type="text/css" rel="stylesheet" media="screen"/>
-		<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/bootstrap-image-gallery.min.css') }}" rel="stylesheet" />
-		<link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui.css') }}" rel="stylesheet">
-		<noscript><link href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}" rel="stylesheet"></noscript>
+        {{ ns_cdn('bootstrap-2-css') }}
+
+		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/css/style.css') }}" />
+
+		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/select2-3.4.5/select2.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/dynatree-bootstrap-skin/ui.dynatree.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/jquery-file-upload/css/bootstrap-image-gallery.min.css') }}" />
+		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui.css') }}" />
+		<noscript>
+            <link rel="stylesheet" href="{{ asset('bundles/nsadmin/jquery-file-upload/css/jquery.fileupload-ui-noscript.css') }}" />
+        </noscript>
 
         {% if form is defined %}
             {{ form_stylesheet(form) }}
@@ -32,9 +30,8 @@
 		{# IE compatibility #}
 		<!--[if lt IE 9]><script src="{{ asset('bundles/nsadmin/html5shim/html5.js') }}"></script><![endif]-->
 
-		{# jQuery #}
-		<script src="{{ asset('bundles/nsadmin/jquery/jquery.min.js') }}"></script>
-		<script src="{{ asset('bundles/nsadmin/jquery/jquery-ui.min.js') }}"></script>
+        {{ ns_cdn('jquery-1.11-js') }}
+        {{ ns_cdn('jqueryui-1.10-js') }}
 
         {% if form is defined %}
             {{ form_javascript(form) }}
@@ -53,15 +50,6 @@
                 <span class="icon-bar"></span>
             </button>
 
-			<style type="text/css">
-				.brand img {
-					opacity: 0.6;
-				}
-				.brand:hover img {
-					opacity: 0.9;
-				}
- 			</style>
-
             <div class="nav-collapse collapse">
 				{% if is_granted("ROLE_ADMIN") %}
 					{{ knp_menu_render('main', { currentClass: 'active', ancestorClass: 'active', template: 'NSAdminBundle:Menu:main-menu.html.twig', depth:1 }) }}
@@ -76,9 +64,7 @@
 </div>
 
 <div class="container" style="margin-top: 30px">
-    {% block content %}
-		&nbsp;
-    {% endblock %}
+    {% block content '' %}
 </div>
 
 <footer class="footer">
@@ -97,63 +83,9 @@
     </div>
 </footer>
 
-<script type="text/javascript">
-	$(function($){
-		// LOADER
-		$('#ns-loader').css('opacity', 0);
-
-		// SORTABLES
-		$(".table-sortable tbody").each(function(i, tbody){
-			// ajax-handler check
-			if (!$(tbody).parent().attr('data-sortable-handler')) {
-				throw "Required attribute 'data-sortable-handler' wasn't found";
-			}
-
-			$(tbody).sortable({
-				'helper': function(e, ui) {
-					ui.children().each(function() {
-						$(this).width($(this).width());
-					});
-					return ui;
-				},
-				'axis': 'y',
-				'stop': function(e, ui){
-					// checking id attribute
-					if (!ui.item.attr('data-sortable-id')) {
-						throw "Required attribute 'data-sortable-id' wasn't found";
-					}
-					// saving position
-					$('#ns-loader').animate({'opacity': 1});
-					$.ajax({
-						'url': $(tbody).parent().attr('data-sortable-handler'),
-						'data': {
-							'id': +ui.item.attr('data-sortable-id'),
-							'position': $(tbody).find('tr').index(ui.item)
-						}
-					})
-					.done(function(res){
-						if (res && typeof(res.error) != 'undefined') {
-							throw res.error;
-						}
-					})
-					.always(function(){
-						$('#ns-loader').animate({'opacity': 0});
-					});
-				}
-			}).disableSelection();
-		});
-
-		// CONFIRM BUTTONS
-		$('.ns-confirm').click(function(){
-			if (confirm('Вы уверены?')) {
-				location.href = $(this).attr('href');
-			}
-			return false;
-		});
-	});
-</script>
-
 {% block foot_script %}
+    {{ ns_cdn('bootstrap-2-js') }}
+
 	{# Dynatree #}
 	<script src="{{ asset('bundles/nsadmin/dynatree/jquery/jquery.cookie.js') }}"></script>
 	<script src="{{ asset('bundles/nsadmin/dynatree/dist/jquery.dynatree.min.js') }}"></script>
@@ -161,13 +93,8 @@
 	{# jQuery Values #}
 	<script src="{{ asset('bundles/nsadmin/jquery/jquery.values.min.js') }}"></script>
 
-    {# Bootstrap from CDN #}
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-
     {# Select 2 #}
     <script src="{{ asset('bundles/nsadmin/select2-3.4.5/select2.js') }}"></script>
-
-	{{ tinymce_init() }}
 
 	<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
 	<script src="{{ asset('bundles/nsadmin/load-image/load-image.min.js') }}"></script>
@@ -185,6 +112,10 @@
 	<script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/jquery.fileupload-fp.js') }}"></script>
 
 	<script src="{{ asset('bundles/nsadmin/load-image/jquery.getimagedata.min.js') }}"></script>
+
+    {{ tinymce_init() }}
+
+    <script src="{{ asset('bundles/nsadmin/js/script.js') }}"></script>
 {% endblock foot_script %}
 
 </body>
