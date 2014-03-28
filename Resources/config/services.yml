@@ -1,7 +1,6 @@
 parameters:
     ns_admin.form.type.ns_image.class:       'NS\AdminBundle\Form\Type\ImageType'
     ns_admin.form.type.ns_multi_image.class: 'NS\AdminBundle\Form\Type\MultiImageType'
-    ns_admin.form.type.tinymce.class:        'NS\AdminBundle\Form\Type\TinyMceType'
     ns_admin.service.class:                  'NS\AdminBundle\Service\AdminService'
     ns_admin.service.uploader.class:         'NS\AdminBundle\Service\UploaderService'
     ns_admin.menu.builder.class:             'NS\AdminBundle\Menu\Builder'
@@ -21,11 +20,6 @@ services:
         class: %ns_admin.form.type.ns_multi_image.class%
         tags:
             - { name: form.type, alias: ns_multi_image }
-
-    ns_admin.form.type.tinymce:
-        class: %ns_admin.form.type.tinymce.class%
-        tags:
-            - { name: form.type, alias: tinymce }
 
     ns_admin.menu.resolver.collection:
         class: %ns_admin.menu.resolver.collection.class%
