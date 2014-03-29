@@ -59,6 +59,9 @@
                 <div class="nav-collapse collapse pull-right">
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                         <ul class="nav">
+                            <li>
+                                <a href="{{ url('ns_cms_main') }}" target="_blank" title="Открыть сайт в новой вкладке"><i class="icon-share-alt icon-white"></i></a>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="icon-user icon-white"></i>&nbsp;{{ app.user.username }}&nbsp;<b class="caret"></b>
