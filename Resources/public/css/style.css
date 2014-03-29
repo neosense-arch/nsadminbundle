@@ -146,3 +146,7 @@ footer .version a:hover {
 .ns-login .submit {
     text-align: right;
 }
+.ns-login .alert {
+    font-size: 14px;
+    text-align: center;
+}
