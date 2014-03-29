@@ -1,8 +1,8 @@
--
-    label:  "Главная"
-    action: "index:index"
-    position: "first"
-    icon: "icon-home"
+#-
+#    label:  "Главная"
+#    action: "index:index"
+#    position: "first"
+#    icon: "icon-home"
 -
     label:  "Настройки"
     name: "settings"

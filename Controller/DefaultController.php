@@ -21,7 +21,11 @@ class DefaultController extends Controller
 	 */
 	public function indexAction()
 	{
-		return $this->render('NSAdminBundle:Default:index.html.twig');
+        return $this->redirect($this->generateUrl('ns_admin_bundle', array(
+            'adminBundle'     => 'NSCmsBundle',
+            'adminController' => 'content',
+            'adminAction'     => 'index',
+        )));
 	}
 
     /**
