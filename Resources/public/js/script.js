@@ -50,4 +50,10 @@ $(function($){
         }
         return false;
     });
+
+    // Login window
+    $('.ns-login').css({top:-200,opacity:0});
+    setTimeout(function(){
+        $('.ns-login').animate({top:'50%',opacity:1}, 300);
+    }, 600);
 });
