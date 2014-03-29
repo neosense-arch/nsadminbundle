@@ -8,15 +8,35 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#info-system" data-toggle="tab">Система</a></li>
         <li><a href="#info-php" data-toggle="tab">phpinfo</a></li>
+        <li><a href="#info-changelog" data-toggle="tab">changelog</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="info-system">
+        <div class="tab-pane ac1tive" id="info-system">
             <p>Версия системы управления: {{ cmsVersion }}</p>
             <p>Производитель: <a href="http://neosense.ru">neosense.ru</a></p>
             <p>Срок годности: не ограничен</p>
         </div>
         <div class="tab-pane ns-phpinfo" id="info-php">
             {{ phpInfo|raw }}
+        </div>
+        <div class="tab-pane ns-changelog active" id="info-changelog">
+            {% for version in changelog %}
+                <div class="version">
+                    <h3>Версия {{ version.version }} <small>{{ version.date|date('d.m.Y') }}</small></h3>
+                    {% for vendor,changes in version.changes %}
+                        <dl>
+                            <dt>{{ vendor }}</dt>
+                            <dd>
+                                <ul>
+                                    {% for message in changes %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </dd>
+                        </dl>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}

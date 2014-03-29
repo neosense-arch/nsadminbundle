@@ -2,10 +2,10 @@
 
 namespace NS\AdminBundle\Controller;
 
+use NS\CoreBundle\Service\ChangelogService;
 use NS\CoreBundle\Service\VersionService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Knp\Menu\ItemInterface;
 
 /**
  * Class AdminToolsController
@@ -31,9 +31,15 @@ class AdminToolsController extends Controller
         ob_end_clean();
         $phpInfo = preg_replace( '%^.*<body>(.*)</body>.*$%ms','$1',$phpInfo);
 
+        // changelog
+        /** @var ChangelogService $changelogService */
+        $changelogService = $this->get('ns_core.service.changelog');
+        $changelog = $changelogService->getChangelog();
+
 		return $this->render('NSAdminBundle:AdminTools:info.html.twig', array(
             'phpInfo'    => $phpInfo,
             'cmsVersion' => $versionService->getVersion(),
+            'changelog'  => $changelog,
         ));
 	}
 }
