@@ -41,6 +41,7 @@
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
 
+
 <header class="navbar navbar-inverse navbar-fixed-top" id="ns-navbar" style="background: red">
     <div class="navbar-inner">
         <div class="container">
@@ -57,7 +58,28 @@
             </div>
 
 			<div class="nav-collapse collapse pull-right">
-                
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <ul class="nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-user icon-white"></i>&nbsp;{{ app.user.username }}&nbsp;<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ url('ns_admin_bundle', {adminBundle: 'NSUserBundle',adminController:'users',adminAction:'form'}) }}?id={{ app.user.id }}">
+                                        <i class="icon-cog"></i>&nbsp;Профиль
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{{ url('fos_user_security_logout') }}">
+                                        <i class="icon-off"></i>&nbsp;Выйти
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                {% endif %}
 			</div>
         </div>
     </div>
@@ -75,13 +97,10 @@
                 <img src="{{ asset('bundles/nsadmin/images/sincerely.png') }}" alt="Sincerely Neosense"/>
 			</a>
         </p>
-		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-			{{ app.user.username }} |
-			<a href="{{ url('fos_user_security_logout') }}">выйти</a>
-		{% else %}
-			<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-		{% endif %}
-		({{ ns_core_version() }})
+		<p class="version">
+            &copy;&nbsp;ООО <a href="http://neosense.ru" target="_blank">«Неосенс»</a>, 2008—{{ 'now'|date('Y') }}<br/>
+            v{{ ns_core_version() }}, <a href="#">информация о системе</a>
+        </p>
     </div>
 </footer>
 

@@ -8,7 +8,7 @@
     name: "settings"
     action: "settings:index"
     position: "last"
-    icon: "icon-wrench"
+    icon: "icon-cog"
 -
     label:  "Информация"
     parent: "settings"
