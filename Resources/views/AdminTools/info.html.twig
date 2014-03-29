@@ -11,15 +11,30 @@
         <li><a href="#info-changelog" data-toggle="tab">changelog</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane ac1tive" id="info-system">
+        <div class="tab-pane active" id="info-system">
+            <h3>Общая информация</h3>
             <p>Версия системы управления: {{ cmsVersion }}</p>
             <p>Производитель: <a href="http://neosense.ru">neosense.ru</a></p>
             <p>Срок годности: не ограничен</p>
+
+            <h3>Что нового в версии {{ cmsVersion }}?</h3>
+            {% for header,changes in changelog[0].changes %}
+                <dl>
+                    <dt>{{ header }}</dt>
+                    <dd>
+                        <ul>
+                            {% for message in changes %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                </dl>
+            {% endfor %}
         </div>
         <div class="tab-pane ns-phpinfo" id="info-php">
             {{ phpInfo|raw }}
         </div>
-        <div class="tab-pane ns-changelog active" id="info-changelog">
+        <div class="tab-pane ns-changelog" id="info-changelog">
             {% for version in changelog %}
                 <div class="version">
                     <h3>Версия {{ version.version }} <small>{{ version.date|date('d.m.Y') }}</small></h3>
