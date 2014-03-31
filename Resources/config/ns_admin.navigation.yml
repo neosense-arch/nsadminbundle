@@ -13,3 +13,7 @@
     label:  "Информация"
     parent: "settings"
     action: "tools:info"
+-
+    label:  "Бандлы"
+    parent: "settings"
+    action: "bundles:index"

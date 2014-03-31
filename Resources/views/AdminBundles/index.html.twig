@@ -1,0 +1,12 @@
+{% extends 'NSAdminBundle:Section:settings.html.twig' %}
+
+{% block content_header %}
+    <h3>Управление бандлами</h3>
+{% endblock %}
+
+{% block content_content %}
+    <form method="post">
+        {{ form_widget(form) }}
+        <input type="submit" value="Сохранить" class="btn" />
+    </form>
+{% endblock %}
