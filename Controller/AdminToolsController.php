@@ -20,10 +20,6 @@ class AdminToolsController extends Controller
 	 */
 	public function infoAction()
 	{
-        // cms info
-        /** @var VersionService $versionService */
-        $versionService = $this->get('ns_core.service.version');
-
         // phpinfo
         ob_start();
         phpinfo();
@@ -31,15 +27,10 @@ class AdminToolsController extends Controller
         ob_end_clean();
         $phpInfo = preg_replace( '%^.*<body>(.*)</body>.*$%ms','$1',$phpInfo);
 
-        // changelog
-        /** @var ChangelogService $changelogService */
-        $changelogService = $this->get('ns_core.service.changelog');
-        $changelog = $changelogService->getChangelog();
-
 		return $this->render('NSAdminBundle:AdminTools:info.html.twig', array(
             'phpInfo'    => $phpInfo,
-            'cmsVersion' => $versionService->getVersion(),
-            'changelog'  => $changelog,
+            'cmsVersion' => $this->get('ns_core.service.version')->getVersion(),
+            'changelog'  => $this->get('ns_core.service.changelog')->getChangelog(),
         ));
 	}
 }
