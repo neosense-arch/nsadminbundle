@@ -7,7 +7,8 @@
 {% block content_content %}
     <ul class="nav nav-tabs">
         <li class="active"><a href="#info-system" data-toggle="tab">Система</a></li>
-        <li><a href="#info-php" data-toggle="tab">phpinfo</a></li>
+        <li><a href="#info-php" data-toggle="tab">PHP</a></li>
+        <li><a href="#info-php-raw" data-toggle="tab">phpinfo</a></li>
         <li><a href="#info-changelog" data-toggle="tab">changelog</a></li>
     </ul>
     <div class="tab-content">
@@ -31,7 +32,48 @@
                 </dl>
             {% endfor %}
         </div>
-        <div class="tab-pane ns-phpinfo" id="info-php">
+        <div class="tab-pane" id="info-php">
+            <h3>Информация PHP</h3>
+            <dl>
+                <dt>Общая информация</dt>
+                <dd>
+                    <p>
+                        Версия: {{ info.general.version }}<br>
+                        Пользователь: {{ info.general.user.name }}:{{ info.general.group.name }}
+                    </p></dd>
+
+                <dt>Файлы конфигурации</dt>
+                <dd>
+                    <ul>
+                        <li>{{ info.phpIni.loaded }}</li>
+                        {% for file in info.phpIni.scanned|split(',') %}
+                            <li>{{ file }}</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+
+                <dt>Загрузка файлов</dt>
+                <dd>
+                    <table class="table table-condensed table-bordered table-striped" style="width: 300px">
+                        <thead>
+                            <tr>
+                                <th style="width:150px">Опция</th>
+                                <th style="width:150px">Значение</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name,value in info.fileUpload %}
+                                <tr>
+                                    <td>{{ name }}</td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </dd>
+            </dl>
+        </div>
+        <div class="tab-pane ns-phpinfo" id="info-php-raw">
             {{ phpInfo|raw }}
         </div>
         <div class="tab-pane ns-changelog" id="info-changelog">

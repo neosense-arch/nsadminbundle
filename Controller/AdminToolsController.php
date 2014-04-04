@@ -31,6 +31,7 @@ class AdminToolsController extends Controller
             'phpInfo'    => $phpInfo,
             'cmsVersion' => $this->get('ns_core.service.version')->getVersion(),
             'changelog'  => $this->get('ns_core.service.changelog')->getChangelog(),
+            'info'       => $this->get('ns_core.service.phpinfo')->getInfo(),
         ));
 	}
 }
