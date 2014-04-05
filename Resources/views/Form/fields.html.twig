@@ -52,48 +52,6 @@
 
 {% block ns_multi_image_widget %}
 	{% spaceless %}
-		<style type="text/css">
-			.ns-multi-image {
-				border: solid 1px #ccc;
-				border-radius: 10px;
-				padding: 10px;
-				overflow: hidden;
-			}
-			.ns-multi-image .drop-container {
-				border: solid 3px transparent;
-				margin-bottom: 5px;
-				padding: 10px 10px 0 10px;
-				position: relative;
-			}
-			.ns-multi-image .drop-container.in {
-				border: dashed 3px #ccc;
-				border-radius: 5px;
-			}
-			.ns-multi-image .drop-container .thumbnail {
-				margin-left: 20px;
-				margin-bottom: 10px;
-			}
-			.ns-multi-image .thumbnail .progress {
-				display: none;
-				margin-bottom: 0;
-				margin-top: -20px;
-				position: relative;
-			}
-			.ns-multi-image .thumbnail img {
-				height: 128px;
-				width: 128px;
-			}
-			.ns-multi-image .thumbnail.in-progress .progress {
-				display: block;
-			}
-			.ns-multi-image .btn-delete {
-				display: none;
-				left: 0;
-				position: absolute;
-				top: 0;
-			}
-		</style>
-
 		<div id="{{ form.vars.id }}_control_group" class="control-group ns-multi-image">
 			{# Default fields #}
 			{{ form_label(form) }}
@@ -225,52 +183,40 @@
 
 {% block ns_file_select_widget %}
     {% spaceless %}
-        <div id="{{ form.vars.id }}_control_group" class="control-group ns-multi-image">
+        {% set uid = form.vars.id ~ random() %}
+        <div id="{{ uid }}_control_group" class="control-group">
             {{ form_label(form) }}
             {{ form_errors(form) }}
             {{ form_widget(form) }}
 
-            <style>
-                .iframe-loader {
-                    width: 128px;
-                    height: 128px;
-                    background: url('/bundles/nsadmin/images/loader-big.gif');
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    margin: -64px 0 0 -64px;
-                    opacity: 0.3;
-                }
-            </style>
-
             <div>
-                <input type="text" disabled="disabled" value="{{ value|default('Не выбрано') }}" id="{{ form.vars.id }}_input" />
-                <a href="#" class="btn btn-default" style="position: relative;top: -5px;left:2px;" id="{{ form.vars.id }}_trigger">Выбрать</a>
+                <input type="text" disabled="disabled" value="{{ value|default('Не выбрано') }}" id="{{ uid }}_input" />
+                <a href="#" class="btn btn-default" style="position: relative;top: -5px;left:2px;" id="{{ uid }}_trigger">Выбрать</a>
             </div>
 
-            <div id="{{ form.vars.id }}_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="{{ form.vars.id }}_dialog_label" aria-hidden="true" style="width:1000px;margin-left:-500px;">
+            <div id="{{ uid }}_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="{{ uid }}_dialog_label" aria-hidden="true" style="width:1000px;margin-left:-500px;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 id="{{ form.vars.id }}_dialog_label">Выберите файл</h3>
+                    <h3 id="{{ uid }}_dialog_label">Выберите файл</h3>
                 </div>
-                <div class="modal-body" style="overflow: hidden;">
+                <div class="modal-body1" style="overflow: hidden;">
                     <div class="iframe-loader"></div>
-                    <iframe src="" style="width:100%;height:400px;border:none" id="{{ form.vars.id }}_iframe"></iframe>
+                    <iframe src="" style="width:100%;height:400px;border:none" id="{{ uid }}_iframe"></iframe>
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Отменить</button>
-                    <button class="btn btn-success btn-save" id="{{ form.vars.id }}_select">Выбрать</button>
+                    <button class="btn btn-success btn-save" id="{{ uid }}_select">Выбрать</button>
                 </div>
             </div>
 
-            <script>
+            <script type="text/javascript">
                 (function($){
-                    var iframe  = $('#{{ form.vars.id }}_iframe');
-                    var hidden  = $('#{{ form.vars.id }}');
-                    var input   = $('#{{ form.vars.id }}_input');
-                    var trigger = $('#{{ form.vars.id }}_trigger');
-                    var dialog  = $('#{{ form.vars.id }}_dialog');
-                    var select  = $('#{{ form.vars.id }}_select');
+                    var iframe  = $('#{{ uid }}_iframe');
+                    var hidden  = $('#{{ uid }}');
+                    var input   = $('#{{ uid }}_input');
+                    var trigger = $('#{{ uid }}_trigger');
+                    var dialog  = $('#{{ uid }}_dialog');
+                    var select  = $('#{{ uid }}_select');
 
                     var fnSelect = function(){
                         var ef = iframe.get(0).contentWindow.$('#elfinder').elfinder('instance');
@@ -309,5 +255,7 @@
                 })(jQuery);
             </script>
         </div>
+
+
     {% endspaceless %}
 {% endblock %}

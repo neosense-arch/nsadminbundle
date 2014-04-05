@@ -197,3 +197,55 @@ footer .version a:hover {
     width: 20px;
     content: ''
 }
+
+.iframe-loader {
+    width: 128px;
+    height: 128px;
+    background: url('../images/loader-big.gif');
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -64px 0 0 -64px;
+    opacity: 0.3;
+}
+
+/*** MULTI IMAGE ***/
+.ns-multi-image {
+    border: solid 1px #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    overflow: hidden;
+}
+.ns-multi-image .drop-container {
+    border: solid 3px transparent;
+    margin-bottom: 5px;
+    padding: 10px 10px 0 10px;
+    position: relative;
+}
+.ns-multi-image .drop-container.in {
+    border: dashed 3px #ccc;
+    border-radius: 5px;
+}
+.ns-multi-image .drop-container .thumbnail {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+.ns-multi-image .thumbnail .progress {
+    display: none;
+    margin-bottom: 0;
+    margin-top: -20px;
+    position: relative;
+}
+.ns-multi-image .thumbnail img {
+    height: 128px;
+    width: 128px;
+}
+.ns-multi-image .thumbnail.in-progress .progress {
+    display: block;
+}
+.ns-multi-image .btn-delete {
+    display: none;
+    left: 0;
+    position: absolute;
+    top: 0;
+}
