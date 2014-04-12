@@ -26,7 +26,7 @@ services:
 
     ns_admin.menu.resolver.bundles:
         class: %ns_admin.menu.resolver.bundles.class%
-        arguments: [@ns_admin.service, @knp_menu.factory]
+        arguments: [@ns_admin.service, @knp_menu.factory, %kernel.environment%]
         tags:
             - { name: ns_admin.menu.resolver }
 
