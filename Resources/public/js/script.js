@@ -52,8 +52,12 @@ $(function($){
     });
 
     // Login window
-    $('.ns-login').css({top:-200,opacity:0});
+    $('.ns-login').css({top:'40%',opacity:0});
     setTimeout(function(){
         $('.ns-login').animate({top:'50%',opacity:1}, 300);
     }, 600);
+    $('.ns-login button[type=submit]').click(function(){
+        $('.ns-login').animate({top:'40%',opacity:0}, 300, function(){$('.ns-login').submit();});
+        return false;
+    });
 });

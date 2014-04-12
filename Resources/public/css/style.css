@@ -152,6 +152,7 @@ footer .version a:hover {
     width: 410px;
     left: 50%;
     margin: -200px 0 0 -205px;
+    opacity: 0;
     overflow: hidden;
     padding: 30px;
     position: absolute;
