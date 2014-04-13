@@ -3,8 +3,17 @@ html,body {
 }
 
 form .control-group textarea {
-	height: 400px;
-	width: 100%;
+	height: 200px;
+	width: 600px;
+}
+
+form .control-group .cke_reset {
+}
+
+.modal-large {
+    width: 900px;
+    margin-left: -450px;
+    max-height: 500px;
 }
 
 /*** HEADER ***/
