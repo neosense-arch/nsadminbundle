@@ -1,0 +1,14 @@
+{% extends 'NSAdminBundle:Layout:col1.html.twig' %}
+
+{% block content_header %}
+    {% if title is defined %}
+        <h3>{{ title }}</h3>
+    {% endif %}
+{% endblock %}
+
+{% block content_content %}
+    <form method="post" {{ form_enctype(form) }} autocomplete="off">
+        {{ form_widget(form, {label: form_label is defined ? form_label : '' }) }}
+        <button class="btn btn-success">Сохранить</button>
+    </form>
+{% endblock %}
