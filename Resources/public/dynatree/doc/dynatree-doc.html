@@ -54,8 +54,8 @@
 <h1>Dynatree documentation</h1>
 
 <div class="hint">
-	This document describes dynatree version: <strong>$Version: 1.2.2$</strong>.<br>
-	Document revision: $Revision: 627, 2012-10-07 16:55:00$.<br>
+	This document describes dynatree version: <strong>$Version:$</strong>.<br>
+	Document revision: $Revision:$.<br>
 	A current version may be found at the project site
 	<a href="http://wwwendt.de/tech/dynatree/index.html">http://wwwendt.de/tech/dynatree/index.html</a>.
 </div>
@@ -127,7 +127,7 @@
 &lt;head>
 	&lt;!-- Include the required JavaScript libraries: -->
 	&lt;script src='jquery/jquery.js' type="text/javascript">&lt;/script>
-	&lt;script src='jquery/jquery.ui.core.js' type="text/javascript">&lt;/script>
+	&lt;script src='jquery/jquery-ui.custom.js' type="text/javascript">&lt;/script>
 	&lt;script src='jquery/jquery.cookie.js' type="text/javascript">&lt;/script>
 
 	&lt;link rel='stylesheet' type='text/css' href='skin/ui.dynatree.css'>
@@ -269,9 +269,10 @@ $("#tree").dynatree({
 		// Make tree nodes accept draggables
 		autoExpandMS: 1000, // Expand nodes after n milliseconds of hovering.
 		preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
-		onDragEnter: null, // Callback(targetNode, sourceNode)
+		revert: false, // true: slide helper back to source if drop is rejected
+		onDragEnter: null, // Callback(targetNode, sourceNode, ui, draggable)
 		onDragOver: null, // Callback(targetNode, sourceNode, hitMode)
-		onDrop: null, // Callback(targetNode, sourceNode, hitMode)
+		onDrop: null, // Callback(targetNode, sourceNode, hitMode, ui, draggable)
 		onDragLeave: null // Callback(targetNode, sourceNode)
 	},
 	ajaxDefaults: { // Used by initAjax option
@@ -291,7 +292,9 @@ $("#tree").dynatree({
 		expires: null // Days or Date; null: session cookie
 	},
 	// Class names used, when rendering the HTML markup.
-	// Note: if only single entries are passed for options.classNames, all other
+	// Note:
+	// These settings only apply on initialisation.
+	// If only single entries are passed for options.classNames, all other
 	// values are still set to default.
 	classNames: {
 		container: "dynatree-container",
@@ -334,6 +337,8 @@ $("#tree").dynatree({
 		Type: <code>dictionary</code>, default: <code>$.ui.dynatree.defaults.classNames</code>.<br>
 		Override class names, that are used, when rendering the HTML markup.<br>
 		Typically this will require some customization of the CSS file too.
+		<br>
+		<b>Note:</b> class names are applied on initialisation only.
 		<br>
 		Example:
 <pre class="prettyprint">
@@ -666,7 +671,7 @@ $("#tree").dynatree({
 &lt;head>
 	&lt;!-- Include the required JavaScript libraries: -->
 	&lt;script src='jquery/jquery.js' type="text/javascript">&lt;/script>
-	&lt;script src='jquery/jquery.ui.core.js' type="text/javascript">&lt;/script>
+	&lt;script src='jquery/jquery-ui.custom.js' type="text/javascript">&lt;/script>
 
 	&lt;link rel='stylesheet' type='text/css' href='skin/ui.dynatree.css' >
 	&lt;script src='jquery.dynatree.js' type="text/javascript">&lt;/script>
@@ -914,20 +919,20 @@ and <code>tree.isReloading()</code> to determine who generated this event.
 	Return <code>false</code> to cancel dragging of node.
 	</dd>
 
-	<dt>opts.dnd.onDragEnter(targetNode, sourceNode)
+	<dt>opts.dnd.onDragEnter(targetNode, sourceNode, ui, draggable)
 	<dd>
 	Return <code>true</code> to make tree nodes accept dropping of draggables.
 	</dd>
 
-	<dt>opts.dnd.onDragOver(targetNode, sourceNode, hitMode)
+	<dt>opts.dnd.onDragOver(targetNode, sourceNode, hitMode, ui, draggable)
 	<dd>
 	</dd>
 
-	<dt>opts.dnd.onDragLeave(targetNode, sourceNode)
+	<dt>opts.dnd.onDragLeave(targetNode, sourceNode, ui, draggable)
 	<dd>
 	</dd>
 
-	<dt>opts.dnd.onDrop(targetNode, sourceNode, hitMode)
+	<dt>opts.dnd.onDrop(targetNode, sourceNode, hitMode, ui, draggable)
 	<dd>
 	This function <i>must</i> be defined to enable dropping of items on the tree.
 	</dd>
@@ -1326,7 +1331,7 @@ $("#tree").dynatree({
 	onPostInit: function(isReloading, isError) {
 		// In lazy mode, this will be called *after* the initAjax request returned.
 		// 'this' is the current tree
-		// isReloading is set, if status wss read from existing cookies
+		// isReloading is set, if status was read from existing cookies
 		// isError is set, if Ajax failed
 		// Fire an onActivate() event for the currently active node
 		this.reactivate();
@@ -1598,9 +1603,10 @@ tree.enableUpdate(prevMode);</pre>
 		function and may be used in $.post() calls.<br>
 		See also the 'form' sample in the Example Browser.
 	</dd>
-	<dt>tree.toDict()
+	<dt>tree.toDict(includeRoot)
 	<dd>
 		Convert the tree into a JavaScript object.<br>
+		If 'includeRoot' is false or omitted, the result is an array of node dcts.<br>
 		See <code>node.toDict()</code> for details.
 	</dd>
 	<dt>tree.visit(fn, includeRoot)
@@ -1662,7 +1668,7 @@ node.addChild({title: "New Node", key: "3333"});
 	</dd>
 	<dt>node.countChildren()</dt>
 	<dd>
-		Return the number of child nodes.
+		Return the number of descendant nodes, i.e. direct and indirect children.
 	</dd>
 	<dt>node.deactivate()</dt>
 	<dd>
