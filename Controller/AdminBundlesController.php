@@ -2,10 +2,10 @@
 
 namespace NS\AdminBundle\Controller;
 
+use NS\AdminBundle\Service\AdminService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -34,13 +34,13 @@ class AdminBundlesController extends Controller
             );
         }
 
-        /** @var Kernel $kernel */
-        $kernel = $this->get('kernel');
-        $bundles = $kernel->getBundles();
+        /** @var AdminService $adminService */
+        $adminService = $this->get('ns_admin.service');
+        $bundles = $adminService->getAvailableBundles();
 
         $choices = array();
         foreach ($bundles as $bundle) {
-            $choices[$bundle->getName()] = $bundle->getName();
+            $choices[$bundle->getName()] = $bundle->getTitle();
         }
 
         $form = $this->createFormBuilder()

@@ -2,6 +2,7 @@
 
 namespace NS\AdminBundle\Service;
 
+use NS\CoreBundle\Bundle\CoreBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -69,4 +70,16 @@ final class AdminService
 		$adminController = 'Admin' . ucfirst($adminController);
 		return "{$adminBundle}:{$adminController}:{$adminAction}";
 	}
+
+    /**
+     * Retrieves only engine bundles
+     *
+     * @return CoreBundle[]|Bundle[]
+     */
+    public function getAvailableBundles()
+    {
+        return array_filter($this->kernel->getBundles(), function(Bundle $bundle){
+            return $bundle instanceof CoreBundle;
+        });
+    }
 }
