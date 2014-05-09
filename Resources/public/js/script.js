@@ -31,14 +31,14 @@ $(function($){
                         'position': $(tbody).find('tr').index(ui.item)
                     }
                 })
-                    .done(function(res){
-                        if (res && typeof(res.error) != 'undefined') {
-                            throw res.error;
-                        }
-                    })
-                    .always(function(){
-                        $('#ns-loader').animate({'opacity': 0});
-                    });
+                .done(function(res){
+                    if (res && typeof(res.error) != 'undefined') {
+                        throw res.error;
+                    }
+                })
+                .always(function(){
+                    $('#ns-loader').animate({'opacity': 0});
+                });
             }
         }).disableSelection();
     });
@@ -52,12 +52,13 @@ $(function($){
     });
 
     // Login window
-    $('.ns-login').css({top:'40%',opacity:0});
-    setTimeout(function(){
-        $('.ns-login').animate({top:'50%',opacity:1}, 300);
-    }, 600);
-    $('.ns-login button[type=submit]').click(function(){
-        $('.ns-login').animate({top:'40%',opacity:0}, 300, function(){$('.ns-login').submit();});
-        return false;
-    });
+    var login = $('.ns-login');
+    if (login.length) {
+        login.css({opacity:1}).addClass('animated ' + ($('.ns-login .alert').length ? 'shake' : 'flipInX'));
+        login.find('button[type=submit]').click(function(){
+            login.addClass('animated flipOutX').submit();
+            return false;
+        });
+        $('.footer').addClass('animated fadeIn');
+    }
 });

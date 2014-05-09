@@ -42,23 +42,25 @@
         {% for bundle in bundles %}
             {% set manifest = attribute(manifests, bundle.name) %}
             {% set active = manifest.alwaysActive or bundle.name in form.bundles.vars.data %}
-            <div class="span3">
-                <div class="admin-bundle" data-bundle="{{ bundle.name }}" data-always-active="{{ manifest.alwaysActive ? '1' : '0' }}">
-                    <object data="{{ asset(manifest.iconSvg) }}" type="image/svg+xml" id="imap" width="60" height="60"></object>
-                    <div class="info">
-                        <div class="title">
-                            <label>
-                                <input type="checkbox"
-                                        {% if active %} checked="cheched"{% endif %}
-                                        {% if manifest.alwaysActive %} disabled="disabled"{% endif %}>
+            {% if not manifest.alwaysActive %}
+                <div class="span3">
+                    <div class="admin-bundle" data-bundle="{{ bundle.name }}" data-always-active="{{ manifest.alwaysActive ? '1' : '0' }}">
+                        <object data="{{ asset(manifest.iconSvg) }}" type="image/svg+xml" id="imap" width="60" height="60"></object>
+                        <div class="info">
+                            <div class="title">
+                                <label>
+                                    <input type="checkbox"
+                                            {% if active %} checked="cheched"{% endif %}
+                                            {% if manifest.alwaysActive %} disabled="disabled"{% endif %}>
 
-                                {{ manifest.title }}
-                            </label>
+                                    {{ manifest.title }}
+                                </label>
+                            </div>
+                            <div class="name">{{ bundle.name }}</div>
                         </div>
-                        <div class="name">{{ bundle.name }}</div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         {% endfor %}
     </div>
 {% endmacro %}
