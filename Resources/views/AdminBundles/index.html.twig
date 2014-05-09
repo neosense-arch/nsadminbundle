@@ -5,8 +5,60 @@
 {% endblock %}
 
 {% block content_content %}
-    <form method="post">
-        {{ form_widget(form) }}
-        <input type="submit" value="Сохранить" class="btn" />
+    <form method="post" class="admin-bundles">
+        {% if systemBundles|length %}
+            <h4>Системные</h4>
+            {{ _self.adminBundles(systemBundles, manifests, form) }}
+        {% endif %}
+
+        {% if userBundles|length %}
+            <h4>Пользовательские</h4>
+            {{ _self.adminBundles(userBundles, manifests, form) }}
+        {% endif %}
+
+        <div style="display: none">
+            {{ form_widget(form) }}
+        </div>
+
+        <hr>
+
+        <input type="submit" value="Сохранить" class="btn btn-success" />
     </form>
+
+    <script type="text/javascript">
+        $('.admin-bundle[data-always-active="0"]').click(function(e){
+            var checkbox = $('#form_bundles').find('input[value=' + $(this).attr('data-bundle') + ']');
+            var state = !checkbox.prop('checked');
+            checkbox.prop('checked', state);
+            $(this).find('input[type=checkbox]').prop('checked', state);
+            e.stopPropagation();
+            return false;
+        });
+    </script>
 {% endblock %}
+
+{% macro adminBundles(bundles, manifests, form) %}
+    <div class="row">
+        {% for bundle in bundles %}
+            {% set manifest = attribute(manifests, bundle.name) %}
+            {% set active = manifest.alwaysActive or bundle.name in form.bundles.vars.data %}
+            <div class="span3">
+                <div class="admin-bundle" data-bundle="{{ bundle.name }}" data-always-active="{{ manifest.alwaysActive ? '1' : '0' }}">
+                    <object data="{{ asset(manifest.iconSvg) }}" type="image/svg+xml" id="imap" width="60" height="60"></object>
+                    <div class="info">
+                        <div class="title">
+                            <label>
+                                <input type="checkbox"
+                                        {% if active %} checked="cheched"{% endif %}
+                                        {% if manifest.alwaysActive %} disabled="disabled"{% endif %}>
+
+                                {{ manifest.title }}
+                            </label>
+                        </div>
+                        <div class="name">{{ bundle.name }}</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endmacro %}

@@ -6,6 +6,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use NS\AdminBundle\Service\AdminService;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -51,7 +52,7 @@ class BundlesMenuResolver implements MenuResolverInterface
     {
         // adding bundles' menus
         foreach ($this->adminService->getActiveBundles() as $bundle) {
-            $fileName = $this->getBundleNavigationFileName($bundle);
+            $fileName = $bundle->getPath() . self::BUNDLE_MENU_NAVIGATION_FILE;
             if (file_exists($fileName)) {
                 $yml = file_get_contents($fileName);
                 foreach (Yaml::parse($yml) as $data) {
@@ -61,15 +62,6 @@ class BundlesMenuResolver implements MenuResolverInterface
                 }
             }
         }
-    }
-
-    /**
-     * @param Bundle $bundle
-     * @return string
-     */
-    private function getBundleNavigationFileName(Bundle $bundle)
-    {
-        return $bundle->getPath() . self::BUNDLE_MENU_NAVIGATION_FILE;
     }
 
     /**

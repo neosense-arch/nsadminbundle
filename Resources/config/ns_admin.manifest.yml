@@ -1,0 +1,4 @@
+title: Административный бандл
+system: true
+alwaysActive: true
+iconSvg: 'bundles/nsadmin/ns_admin/bundle.svg'

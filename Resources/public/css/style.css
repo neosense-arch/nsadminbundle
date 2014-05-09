@@ -259,3 +259,43 @@ footer .version a:hover {
     position: absolute;
     top: 0;
 }
+
+/*** BUNDLE ADMIN ***/
+.admin-bundle {
+    cursor: pointer;
+    height: 60px;
+    margin: 0 0 10px 0;
+    padding: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.admin-bundle:hover {
+    background: #f7f7f7;
+}
+.admin-bundle object {
+    float: left;
+    height: 60px;
+    margin: 0 5px 0 0;
+    width: 60px;
+}
+.admin-bundle .info {
+    float: left;
+}
+.admin-bundle .title {
+    margin: 12px 0 0 0;
+}
+.admin-bundle .title input {
+    position: relative;
+    top: -3px;
+}
+.admin-bundle .name {
+    color: #ddd;
+    font-size: 11px;
+    margin: -7px 0 0 16px;
+}
+
+

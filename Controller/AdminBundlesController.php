@@ -21,26 +21,22 @@ class AdminBundlesController extends Controller
      */
 	public function indexAction(Request $request)
 	{
-        $fileName = $this->container->getParameter('kernel.root_dir') . '/config/ns_admin.bundles.yml';
-
-        if (file_exists($fileName)) {
-            $yml = Yaml::parse(file_get_contents($fileName));
-        }
-        else {
-            $yml = array(
-                'ns_admin' => array(
-                    'bundles' => array('NSAdminBundle', 'NSCmsBundle', 'NSUserBundle'),
-                ),
-            );
-        }
-
         /** @var AdminService $adminService */
         $adminService = $this->get('ns_admin.service');
         $bundles = $adminService->getAvailableBundles();
 
         $choices = array();
         foreach ($bundles as $bundle) {
-            $choices[$bundle->getName()] = $bundle->getTitle();
+            $manifest = $adminService->getBundleManifest($bundle);
+            if (!$manifest->isAlwaysActive()) {
+                $choices[$bundle->getName()] = $manifest->getTitle() ?: $bundle->getTitle();
+            }
+        }
+
+        $fileName = $this->container->getParameter('kernel.root_dir') . '/config/ns_admin.bundles.yml';
+        $yml = array('ns_admin' => array('bundles' => array()));
+        if (file_exists($fileName)) {
+            $yml = Yaml::parse(file_get_contents($fileName));
         }
 
         $form = $this->createFormBuilder()
@@ -66,8 +62,17 @@ class AdminBundlesController extends Controller
             )));
         }
 
+        // bundle manifests
+        $manifests = array();
+        foreach ($bundles as $bundle) {
+            $manifests[$bundle->getName()] = $adminService->getBundleManifest($bundle);
+        }
+
         return $this->render('NSAdminBundle:AdminBundles:index.html.twig', array(
-            'form' => $form->createView(),
+            'form'          => $form->createView(),
+            'systemBundles' => $adminService->getSystemBundles(),
+            'userBundles'   => $adminService->getUserBundles(),
+            'manifests'     => $manifests,
         ));
 	}
 }
