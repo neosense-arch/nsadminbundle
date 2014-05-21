@@ -11,6 +11,14 @@ parameters:
     ns_admin.menu.main.voter.class:          'NS\AdminBundle\Menu\Matcher\Voter\AdminVoter'
 
 services:
+    ns_admin.form.type.ns_choice_add:
+        class: 'NS\AdminBundle\Form\Type\ChoiceAddType'
+        tags: [{ name: form.type, alias: ns_choice_add }]
+
+    ns_admin.form.type.ns_entity_add:
+        class: 'NS\AdminBundle\Form\Type\EntityAddType'
+        tags: [{ name: form.type, alias: ns_entity_add }]
+
     ns_admin.form.type.ns_file_select:
         class: 'NS\AdminBundle\Form\Type\FileSelectType'
         tags:

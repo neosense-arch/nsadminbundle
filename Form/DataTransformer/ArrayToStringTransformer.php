@@ -68,6 +68,9 @@ class ArrayToStringTransformer implements DataTransformerInterface
 	 */
 	public function reverseTransform($value)
 	{
+        if (!$value) {
+            return array();
+        }
 		return explode(';', $value);
 	}
 

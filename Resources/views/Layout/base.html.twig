@@ -10,6 +10,8 @@
 	{% block styles %}
         {{ ns_cdn('bootstrap-2-css') }}
 
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+
 		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/css/style.css') }}" />
 		<link rel="stylesheet" href="{{ asset('bundles/nsadmin/css/animate.min.css') }}" />
 
@@ -142,6 +144,9 @@
 	<script src="{{ asset('bundles/nsadmin/jquery-file-upload/js/jquery.fileupload-fp.js') }}"></script>
 
 	<script src="{{ asset('bundles/nsadmin/load-image/jquery.getimagedata.min.js') }}"></script>
+
+	<script src="{{ asset('bundles/nsadmin/NS/Admin.js') }}"></script>
+
 
     <script src="{{ asset('bundles/nsadmin/js/script.js') }}"></script>
 {% endblock foot_script %}

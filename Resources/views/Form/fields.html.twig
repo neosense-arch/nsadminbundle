@@ -259,3 +259,78 @@
 
     {% endspaceless %}
 {% endblock %}
+
+{% block ns_choice_add_widget %}
+    {% set uid = form.vars.id ~ random() %}
+    <div class="ns-form-choice" id={{ uid }}>
+        {{ block('choice_widget') }}
+        <a href="#" class="btn"><i class="icon-plus"></i> Добавить</a>
+        <div class="ns-dialog" data-url="{{ form.vars.url }}"></div>
+    </div>
+
+    <script>
+        (function($){
+            var el = $('#{{ uid }}'), dlg = el.find('.ns-dialog');
+            var fnHandle = function(){
+                $.ajax({
+                    'url': dlg.attr('data-url'),
+                    'type': 'POST',
+                    'data': dlg.find('form').serialize()
+                })
+                        .done(function(res){
+
+                            if (!res.id) {
+                                dlg.html(res);
+                            }
+                            else {
+                                el.find('select')
+                                        .append('<option value="'+res.id+'">'+res.label+'</option>')
+                                        .val(res.id);
+                                dlg.dialog('close');
+                            }
+                        });
+                fnLoader();
+            };
+            var fnLoader = function(){
+                dlg.html('<div class="loading" style="text-align:center;margin-top:100px;font-size:14px;color:#ccc;">Загрузка...</div>');
+            };
+            dlg.dialog({
+                dialogClass: 'animated bounceInDown ns-dialog',
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                draggable: false,
+                width: {{ form.vars.dialogWidth }},
+                height: {{ form.vars.dialogHeight }},
+                buttons: [
+                    {
+                        text: 'Сохранить',
+                        click: fnHandle
+                    },
+                    {
+                        text: 'Отмена',
+                        click: function(){
+                            dlg.dialog('close');
+                        }
+                    }
+                ]
+            });
+            dlg.keypress(function(e) {
+                if (e.keyCode == $.ui.keyCode.ENTER) {
+                    fnHandle();
+                }
+            });
+            el.find('.btn').click(function(){
+                fnLoader();
+                dlg.load(dlg.attr('data-url'), function(){
+                    dlg.find('input:eq(0)').focus();
+                }).dialog('open');
+                return false;
+            });
+        })(jQuery);
+    </script>
+{% endblock %}
+
+{% block ns_entity_add_widget %}
+    {{ block('ns_choice_add_widget') }}
+{% endblock %}
