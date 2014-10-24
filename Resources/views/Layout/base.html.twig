@@ -34,11 +34,13 @@
 		<!--[if lt IE 9]><script src="{{ asset('bundles/nsadmin/html5shim/html5.js') }}"></script><![endif]-->
 
         {{ ns_cdn('jquery-1.11-js') }}
-        {{ ns_cdn('jqueryui-1.10-js') }}
+        <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
 
         {% if form is defined %}
             {{ form_javascript(form) }}
         {% endif %}
+
+        <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU&coordorder=latlong" type="text/javascript"></script>
 	{% endblock %}
 </head>
 
