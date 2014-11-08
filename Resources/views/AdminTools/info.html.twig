@@ -16,21 +16,6 @@
             <h3>Общая информация</h3>
             <p>Версия системы управления: {{ cmsVersion }}</p>
             <p>Производитель: <a href="http://neosense.ru">neosense.ru</a></p>
-            <p>Срок годности: не ограничен</p>
-
-            <h3>Что нового в версии {{ cmsVersion }}?</h3>
-            {% for header,changes in changelog[0].changes %}
-                <dl>
-                    <dt>{{ header }}</dt>
-                    <dd>
-                        <ul>
-                            {% for message in changes %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    </dd>
-                </dl>
-            {% endfor %}
         </div>
         <div class="tab-pane" id="info-php">
             <h3>Информация PHP</h3>
@@ -46,9 +31,11 @@
                 <dd>
                     <ul>
                         <li>{{ info.phpIni.loaded }}</li>
-                        {% for file in info.phpIni.scanned|split(',') %}
-                            <li>{{ file }}</li>
-                        {% endfor %}
+                        {% if info.phpIni.scanned %}
+                            {% for file in info.phpIni.scanned|split(',') %}
+                                <li>{{ file }}</li>
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </dd>
 
